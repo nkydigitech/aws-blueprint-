@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS Blueprint - Zero to Hero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --aws-orange: #FF9900;
+  --aws-dark: #232F3E;
+  --aws-darker: #161E2D;
+  --bg-primary: #0a0e1a;
+  --bg-secondary: #111827;
+  --bg-card: rgba(17,24,39,0.7);
+  --text-primary: #f0f4f8;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: rgba(255,153,0,0.15);
+  --border-hover: rgba(255,153,0,0.4);
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+  --gradient-1: #FF9900;
+  --gradient-2: #FF6600;
+  --shadow-glow: 0 0 40px rgba(255,153,0,0.15);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; scroll-padding-top:80px; }
+body { font-family:'Inter',sans-serif; background:var(--bg-primary); color:var(--text-primary); line-height:1.6; overflow-x:hidden; }
+::-webkit-scrollbar { width:8px; }
+::-webkit-scrollbar-track { background:var(--bg-primary); }
+::-webkit-scrollbar-thumb { background:var(--aws-orange); border-radius:4px; }
+.bg-grid { position:fixed; top:0; left:0; width:100%; height:100%; background-image: linear-gradient(rgba(255,153,0,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,153,0,0.03) 1px,transparent 1px); background-size:50px 50px; pointer-events:none; z-index:0; }
+.bg-glow { position:fixed; width:600px; height:600px; border-radius:50%; background:radial-gradient(circle,rgba(255,153,0,0.08) 0%,transparent 70%); pointer-events:none; z-index:0; animation:float 20s infinite ease-in-out; }
+.bg-glow-1 { top:-200px; left:-200px; }
+.bg-glow-2 { bottom:-200px; right:-200px; animation-delay:-10s; }
+@keyframes float { 0%,100%{transform:translate(0,0) scale(1);} 33%{transform:translate(50px,-50px) scale(1.1);} 66%{transform:translate(-30px,30px) scale(0.9);} }
+nav { position:fixed; top:0; width:100%; background:rgba(10,14,26,0.85); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); z-index:1000; padding:0 2rem; }
+.nav-container { max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; height:70px; }
+.logo { display:flex; align-items:center; gap:12px; font-weight:800; font-size:1.3rem; color:var(--aws-orange); text-decoration:none; }
+.logo svg { width:32px; height:32px; }
+.nav-links { display:flex; gap:2rem; list-style:none; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-weight:500; font-size:0.9rem; transition:color 0.3s; position:relative; }
+.nav-links a:hover,.nav-links a.active { color:var(--aws-orange); }
+.nav-links a::after { content:''; position:absolute; bottom:-6px; left:0; width:0; height:2px; background:var(--aws-orange); transition:width 0.3s; }
+.nav-links a:hover::after,.nav-links a.active::after { width:100%; }
+.progress-bar { position:fixed; top:70px; left:0; height:3px; background:linear-gradient(90deg,var(--gradient-1),var(--gradient-2)); z-index:1001; transition:width 0.3s; box-shadow:0 0 10px rgba(255,153,0,0.5); }
+.hero { min-height:100vh; display:flex; align-items:center; justify-content:center; position:relative; padding:120px 2rem 80px; overflow:hidden; }
+.hero-content { max-width:900px; text-align:center; position:relative; z-index:1; }
+.hero-badge { display:inline-flex; align-items:center; gap:8px; padding:8px 20px; background:rgba(255,153,0,0.1); border:1px solid var(--border); border-radius:50px; font-size:0.85rem; color:var(--aws-orange); margin-bottom:2rem; animation:fadeInUp 0.8s ease-out; }
+.hero h1 { font-size:clamp(2.5rem,6vw,4.5rem); font-weight:900; line-height:1.1; margin-bottom:1.5rem; animation:fadeInUp 0.8s ease-out 0.2s both; }
+.hero h1 .highlight { background:linear-gradient(135deg,var(--gradient-1),var(--gradient-2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.hero-subtitle { font-size:1.25rem; color:var(--text-secondary); margin-bottom:3rem; max-width:600px; margin-left:auto; margin-right:auto; animation:fadeInUp 0.8s ease-out 0.4s both; }
+.hero-buttons { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; animation:fadeInUp 0.8s ease-out 0.6s both; }
+.btn { padding:14px 32px; border-radius:8px; font-weight:600; font-size:1rem; text-decoration:none; transition:all 0.3s; cursor:pointer; border:none; display:inline-flex; align-items:center; gap:8px; }
+.btn-primary { background:linear-gradient(135deg,var(--gradient-1),var(--gradient-2)); color:white; box-shadow:0 4px 20px rgba(255,153,0,0.3); }
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(255,153,0,0.4); }
+.btn-secondary { background:transparent; color:var(--text-primary); border:1px solid var(--border); }
+.btn-secondary:hover { border-color:var(--aws-orange); background:rgba(255,153,0,0.05); }
+.hero-stats { display:flex; justify-content:center; gap:3rem; margin-top:4rem; animation:fadeInUp 0.8s ease-out 0.8s both; }
+.stat { text-align:center; }
+.stat-value { font-size:2.5rem; font-weight:800; color:var(--aws-orange); }
+.stat-label { font-size:0.9rem; color:var(--text-muted); margin-top:4px; }
+@keyframes fadeInUp { from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);} }
+section { position:relative; z-index:1; padding:100px 2rem; }
+.container { max-width:1200px; margin:0 auto; }
+.section-header { text-align:center; margin-bottom:4rem; }
+.section-tag { display:inline-block; padding:6px 16px; background:rgba(255,153,0,0.1); border:1px solid var(--border); border-radius:50px; font-size:0.8rem; color:var(--aws-orange); font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:1rem; }
+.section-title { font-size:clamp(2rem,4vw,3rem); font-weight:800; margin-bottom:1rem; }
+.section-desc { color:var(--text-secondary); font-size:1.1rem; max-width:600px; margin:0 auto; }
+.card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; }
+.card { background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:2rem; transition:all 0.3s; backdrop-filter:blur(10px); }
+.card:hover { border-color:var(--border-hover); transform:translateY(-4px); box-shadow:var(--shadow-glow); }
+.card-icon { width:48px; height:48px; background:rgba(255,153,0,0.1); border-radius:12px; display:flex; align-items:center; justify-content:center; margin-bottom:1.5rem; font-size:1.5rem; }
+.card h3 { font-size:1.25rem; font-weight:700; margin-bottom:0.75rem; }
+.card p { color:var(--text-secondary); font-size:0.95rem; }
+.code-block { background:#0d1117; border:1px solid var(--border); border-radius:12px; overflow:hidden; margin:1.5rem 0; position:relative; }
+.code-header { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:rgba(255,153,0,0.05); border-bottom:1px solid var(--border); }
+.code-lang { font-size:0.8rem; color:var(--aws-orange); font-weight:600; font-family:'JetBrains Mono',monospace; }
+.copy-btn { background:transparent; border:1px solid var(--border); color:var(--text-muted); padding:6px 12px; border-radius:6px; font-size:0.8rem; cursor:pointer; transition:all 0.3s; display:flex; align-items:center; gap:6px; }
+.copy-btn:hover { border-color:var(--aws-orange); color:var(--aws-orange); }
+.copy-btn.copied { border-color:var(--success); color:var(--success); }
+pre { padding:1.5rem; overflow-x:auto; font-family:'JetBrains Mono',monospace; font-size:0.9rem; line-height:1.6; }
+code { font-family:'JetBrains Mono',monospace; color:var(--text-primary); }
+.code-block .comment { color:#6b7280; }
+.code-block .keyword { color:#ff7b72; }
+.code-block .string { color:#a5d6ff; }
+.code-block .function { color:#d2a8ff; }
+.code-block .number { color:#79c0ff; }
+.code-block .operator { color:#ff7b72; }
+.terminal { background:#0d1117; border-radius:12px; overflow:hidden; border:1px solid var(--border); margin:1.5rem 0; }
+.terminal-header { display:flex; align-items:center; gap:8px; padding:12px 16px; background:rgba(255,255,255,0.02); border-bottom:1px solid var(--border); }
+.terminal-dot { width:12px; height:12px; border-radius:50%; }
+.terminal-dot.red { background:#ff5f56; }
+.terminal-dot.yellow { background:#ffbd2e; }
+.terminal-dot.green { background:#27c93f; }
+.terminal-title { margin-left:8px; font-size:0.8rem; color:var(--text-muted); }
+.terminal-body { padding:1.5rem; font-family:'JetBrains Mono',monospace; font-size:0.9rem; line-height:1.6; color:var(--text-secondary); }
+.terminal-prompt { color:var(--aws-orange); }
+.terminal-command { color:var(--text-primary); }
+.terminal-output { color:var(--text-secondary); margin-top:4px; }
+.steps { display:flex; flex-direction:column; gap:2rem; }
+.step { display:flex; gap:1.5rem; position:relative; }
+.step-number { width:48px; height:48px; min-width:48px; background:linear-gradient(135deg,var(--gradient-1),var(--gradient-2)); border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.2rem; color:white; box-shadow:0 4px 15px rgba(255,153,0,0.3); }
+.step-content { flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:2rem; backdrop-filter:blur(10px); }
+.step-content h3 { font-size:1.2rem; font-weight:700; margin-bottom:0.75rem; }
+.step-content p { color:var(--text-secondary); margin-bottom:1rem; }
+.lab-section { background:linear-gradient(180deg,rgba(255,153,0,0.03) 0%,transparent 100%); }
+.lab-card { background:var(--bg-card); border:1px solid var(--border); border-radius:20px; overflow:hidden; margin-bottom:2rem; backdrop-filter:blur(10px); }
+.lab-header { padding:2rem; background:rgba(255,153,0,0.05); border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; }
+.lab-title { font-size:1.5rem; font-weight:800; }
+.lab-meta { display:flex; gap:1rem; flex-wrap:wrap; }
+.lab-badge { padding:6px 14px; border-radius:50px; font-size:0.8rem; font-weight:600; }
+.lab-badge.dev { background:rgba(59,130,246,0.15); color:#60a5fa; }
+.lab-badge.prod { background:rgba(16,185,129,0.15); color:#34d399; }
+.lab-badge.time { background:rgba(245,158,11,0.15); color:#fbbf24; }
+.lab-body { padding:2rem; }
+.lab-body h4 { font-size:1.1rem; font-weight:700; margin:2rem 0 1rem; color:var(--aws-orange); }
+.lab-body h4:first-child { margin-top:0; }
+.arch-diagram { background:#0d1117; border:1px solid var(--border); border-radius:12px; padding:2rem; font-family:'JetBrains Mono',monospace; font-size:0.85rem; line-height:1.8; overflow-x:auto; margin:1.5rem 0; color:var(--text-secondary); }
+.info-box { padding:1.25rem 1.5rem; border-radius:12px; margin:1.5rem 0; display:flex; gap:1rem; align-items:flex-start; }
+.info-box.tip { background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); }
+.info-box.warning { background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.2); }
+.info-box.danger { background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); }
+.info-box.info { background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.2); }
+.info-box-icon { font-size:1.25rem; min-width:24px; }
+.info-box-content { flex:1; }
+.info-box-content strong { color:var(--text-primary); display:block; margin-bottom:4px; }
+.info-box-content p { color:var(--text-secondary); margin:0; font-size:0.95rem; }
+.table-container { overflow-x:auto; margin:1.5rem 0; }
+table { width:100%; border-collapse:collapse; font-size:0.95rem; }
+th,td { padding:12px 16px; text-align:left; border-bottom:1px solid var(--border); }
+th { background:rgba(255,153,0,0.05); color:var(--aws-orange); font-weight:600; }
+td { color:var(--text-secondary); }
+tr:hover td { background:rgba(255,153,0,0.02); }
+footer { background:var(--bg-secondary); border-top:1px solid var(--border); padding:4rem 2rem 2rem; position:relative; z-index:1; }
+.footer-content { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:3rem; margin-bottom:3rem; }
+.footer-brand { font-size:1.5rem; font-weight:800; color:var(--aws-orange); margin-bottom:1rem; }
+.footer-desc { color:var(--text-muted); font-size:0.95rem; }
+.footer-links h4 { font-size:1rem; font-weight:700; margin-bottom:1rem; color:var(--text-primary); }
+.footer-links ul { list-style:none; }
+.footer-links li { margin-bottom:0.5rem; }
+.footer-links a { color:var(--text-muted); text-decoration:none; font-size:0.95rem; transition:color 0.3s; }
+.footer-links a:hover { color:var(--aws-orange); }
+.footer-bottom { max-width:1200px; margin:0 auto; padding-top:2rem; border-top:1px solid var(--border); text-align:center; color:var(--text-muted); font-size:0.9rem; }
+.mobile-menu-btn { display:none; background:none; border:none; color:var(--text-primary); font-size:1.5rem; cursor:pointer; }
+.reveal { opacity:0; transform:translateY(30px); transition:all 0.8s ease-out; }
+.reveal.active { opacity:1; transform:translateY(0); }
+.checklist { list-style:none; margin:1rem 0; }
+.checklist li { padding:8px 0; padding-left:2rem; position:relative; color:var(--text-secondary); }
+.checklist li::before { content:'✓'; position:absolute; left:0; color:var(--success); font-weight:700; }
+code.inline { background:rgba(255,153,0,0.1); color:var(--aws-orange); padding:2px 8px; border-radius:4px; font-size:0.9em; }
+.two-col { display:grid; grid-template-columns:repeat(auto-fit,minmax(400px,1fr)); gap:2rem; }
+.highlight-box { background:linear-gradient(135deg,rgba(255,153,0,0.1),rgba(255,102,0,0.05)); border:1px solid var(--border); border-radius:16px; padding:2rem; margin:2rem 0; }
+.highlight-box h4 { color:var(--aws-orange); margin-bottom:1rem; }
+.expected-output { background:#0d1117; border:1px solid rgba(16,185,129,0.3); border-radius:12px; overflow:hidden; margin:1.5rem 0; }
+.expected-output-header { padding:12px 16px; background:rgba(16,185,129,0.1); border-bottom:1px solid rgba(16,185,129,0.2); display:flex; align-items:center; gap:8px; color:var(--success); font-weight:600; font-size:0.9rem; }
+.expected-output pre { color:var(--text-secondary); }
+@media(max-width:768px){
+  .nav-links { display:none; position:absolute; top:70px; left:0; width:100%; background:var(--bg-primary); flex-direction:column; padding:2rem; border-bottom:1px solid var(--border); }
+  .nav-links.active { display:flex; }
+  .mobile-menu-btn { display:block; }
+  .hero-stats { gap:1.5rem; }
+  .stat-value { font-size:1.75rem; }
+  .step { flex-direction:column; }
+  .step-number { align-self:flex-start; }
+  .two-col { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+<div class="progress-bar" id="progressBar"></div>
+<nav>
+<div class="nav-container">
+<a href="#" class="logo">
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#FF9900"/><path d="M2 17L12 22L22 17" stroke="#FF9900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12L12 17L22 12" stroke="#FF9900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+AWS Blueprint
+</a>
+<button class="mobile-menu-btn" onclick="toggleMenu()">&#9776;</button>
+<ul class="nav-links" id="navLinks">
+<li><a href="#overview" class="nav-link">Overview</a></li>
+<li><a href="#architecture" class="nav-link">Architecture</a></li>
+<li><a href="#account" class="nav-link">Account Setup</a></li>
+<li><a href="#iam" class="nav-link">IAM</a></li>
+<li><a href="#cli" class="nav-link">AWS CLI</a></li>
+<li><a href="#dev-labs" class="nav-link">Dev Labs</a></li>
+<li><a href="#prod-labs" class="nav-link">Prod Labs</a></li>
+</ul>
+</div>
+</nav>
+
+<section class="hero">
+<div class="hero-content">
+<div class="hero-badge"><span>&#9889;</span> Complete AWS Mastery Path</div>
+<h1>AWS Blueprint<br><span class="highlight">Zero to Hero</span></h1>
+<p class="hero-subtitle">The most comprehensive, hands-on AWS learning experience ever created. From creating your first account to deploying production-grade infrastructure.</p>
+<div class="hero-buttons">
+<a href="#overview" class="btn btn-primary">Start Learning &rarr;</a>
+<a href="#dev-labs" class="btn btn-secondary">Jump to Labs</a>
+</div>
+<div class="hero-stats">
+<div class="stat"><div class="stat-value">6</div><div class="stat-label">Hands-on Labs</div></div>
+<div class="stat"><div class="stat-value">50+</div><div class="stat-label">AWS Services</div></div>
+<div class="stat"><div class="stat-value">0&rarr;100</div><div class="stat-label">Skill Level</div></div>
+</div>
+</div>
+</section>
+
+<section id="overview">
+<div class="container">
+<div class="section-header reveal">
+<div class="section-tag">Chapter 01</div>
+<h2 class="section-title">What is AWS?</h2>
+<p class="section-desc">Amazon Web Services is the world's most comprehensive and broadly adopted cloud platform, offering over 200 fully featured services from data centers globally.</p>
+</div>
+<div class="card-grid reveal">
+<div class="card"><div class="card-icon">&#9729;&#65039;</div><h3>Cloud Computing</h3><p>AWS provides on-demand delivery of IT resources over the internet with pay-as-you-go pricing. No upfront costs, no long-term contracts.</p></div>
+<div class="card"><div class="card-icon">&#127758;</div><h3>Global Infrastructure</h3><p>33 geographic regions, 105 Availability Zones, and 450+ Edge Locations. Deploy your applications closer to your users for lower latency.</p></div>
+<div class="card"><div class="card-icon">&#128274;</div><h3>Security First</h3><p>AWS is architected to be the most secure cloud computing environment. Used by banks, governments, and military organizations worldwide.</p></div>
+<div class="card"><div class="card-icon">&#9889;</div><h3>Infinite Scale</h3><p>Scale from a single server to thousands in minutes. Handle millions of requests without breaking a sweat or changing your architecture.</p></div>
+<div class="card"><div class="card-icon">&#128176;</div><h3>Cost Effective</h3><p>Pay only for what you use. AWS Free Tier lets you explore 100+ services free for 12 months, with some services always free.</p></div>
+<div class="card"><div class="card-icon">&#128295;</div><h3>200+ Services</h3><p>From compute, storage, and databases to machine learning, IoT, and quantum computing - everything you need to build anything.</p></div>
+</div>
+<div class="highlight-box reveal">
+<h4>&#127919; Why Learn AWS in 2026?</h4>
+<p>AWS holds 32% of the global cloud market share. The average AWS Solutions Architect salary exceeds $150,000/year. Over 1 million businesses run on AWS. Learning AWS isn't just adding a skill - it's future-proofing your career.</p>
+</div>
+<div class="info-box info reveal">
+<div class="info-box-icon">&#8505;&#65039;</div>
+<div class="info-box-content"><strong>AWS Free Tier</strong><p>New AWS accounts get 12 months of Free Tier access, including 750 hours/month of EC2 t2.micro, 5GB of S3 storage, and 1 million Lambda requests per month. Perfect for learning without spending a dime.</p></div>
+</div>
+</div>
+</section>
+<section id="architecture" style="background:var(--bg-secondary);">
+<div class="container">
+<div class="section-header reveal">
+<div class="section-tag">Chapter 02</div>
+<h2 class="section-title">AWS Architecture</h2>
+<p class="section-desc">Understanding how AWS is structured is crucial before you start building. Let's explore the foundational concepts.</p>
+</div>
+<div class="reveal">
+<h3 style="margin-bottom:1.5rem;font-size:1.5rem;">Global Infrastructure Hierarchy</h3>
+<div class="arch-diagram">
++-----------------------------------------------------------------------------+
+|                           AWS GLOBAL INFRASTRUCTURE                          |
++-----------------------------------------------------------------------------+
+|                                                                              |
+|  +-------------+    +-------------+    +-------------+    +-------------+  |
+|  |   Region    |    |   Region    |    |   Region    |    |   Region    |  |
+|  | us-east-1   |    | eu-west-1   |    | ap-south-1  |    | sa-east-1   |  |
+|  | (N.Virginia)|    | (Ireland)   |    | (Mumbai)    |    | (Sao Paulo) |  |
+|  +------+------+    +------+------+    +------+------+    +------+------+  |
+|         |                  |                  |                  |         |
+|         v                  v                  v                  v         |
+|  +-------------+    +-------------+    +-------------+    +-------------+  |
+|  |    AZ-A     |    |    AZ-A     |    |    AZ-A     |    |    AZ-A     |  |
+|  |  +-----+    |    |  +-----+    |    |  +-----+    |    |  +-----+    |  |
+|  |  | DC  |    |    |  | DC  |    |    |  | DC  |    |    |  | DC  |    |  |
+|  |  +-----+    |    |  +-----+    |    |  +-----+    |    |  +-----+    |  |
+|  +-------------+    +-------------+    +-------------+    +-------------+  |
+|  +-------------+    +-------------+    +-------------+    +-------------+  |
+|  |    AZ-B     |    |    AZ-B     |    |    AZ-B     |    |    AZ-B     |  |
+|  |  +-----+    |    |  +-----+    |    |  +-----+    |    |  +-----+    |  |
+|  |  | DC  |    |    |  | DC  |    |    |  | DC  |    |    |  | DC  |    |  |
+|  |  +-----+    |    |  +-----+    |    |  +-----+    |    |  +-----+    |  |
+|  +-------------+    +-------------+    +-------------+    +-------------+  |
+|  +-------------+    +-------------+    +-------------+    +-------------+  |
+|  |    AZ-C     |    |    AZ-C     |    |    AZ-C     |    |    AZ-C     |  |
+|  |  +-----+    |    |  +-----+    |    |  +-----+    |    |  +-----+    |  |
+|  |  | DC  |    |    |  | DC  |    |    |  | DC  |    |    |  | DC  |    |  |
+|  |  +-----+    |    |  +-----+    |    |  +-----+    |    |  +-----+    |  |
+|  +-------------+    +-------------+    +-------------+    +-------------+  |
+|                                                                              |
+|  Region = Geographic area (e.g., US East, Europe)                           |
+|  AZ = Availability Zone (isolated data center within a region)              |
+|  DC = Data Center (physical building with servers)                          |
+|                                                                              |
++-----------------------------------------------------------------------------+
+</div>
+<div class="two-col">
+<div>
+<h4 style="color:var(--aws-orange);margin-bottom:1rem;">Key Concepts</h4>
+<ul class="checklist">
+<li><strong>Region:</strong> A physical location worldwide with multiple AZs</li>
+<li><strong>Availability Zone (AZ):</strong> One or more discrete data centers</li>
+<li><strong>Edge Location:</strong> CDN endpoint for CloudFront (450+ worldwide)</li>
+<li><strong>Local Zone:</strong> Extension of a region closer to users</li>
+<li><strong>Wavelength:</strong> 5G edge computing infrastructure</li>
+</ul>
+</div>
+<div>
+<h4 style="color:var(--aws-orange);margin-bottom:1rem;">Design Principles</h4>
+<ul class="checklist">
+<li><strong>High Availability:</strong> Deploy across multiple AZs</li>
+<li><strong>Fault Tolerance:</strong> Automatic failover on failure</li>
+<li><strong>Scalability:</strong> Scale up or out automatically</li>
+<li><strong>Security:</strong> Defense in depth at every layer</li>
+<li><strong>Cost Optimization:</strong> Right-size resources always</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="info-box tip reveal">
+<div class="info-box-icon">&#128161;</div>
+<div class="info-box-content"><strong>Pro Tip</strong><p>Always design for at least 2 AZs in production. If one data center catches fire, floods, or loses power, your application stays online. AWS handles the failover automatically when configured correctly.</p></div>
+</div>
+</div>
+</section>
+
+<section id="account">
+<div class="container">
+<div class="section-header reveal">
+<div class="section-tag">Chapter 03</div>
+<h2 class="section-title">Creating Your AWS Account</h2>
+<p class="section-desc">Your AWS account is your gateway to the cloud. Let's set it up correctly from day one with security best practices.</p>
+</div>
+<div class="steps reveal">
+<div class="step">
+<div class="step-number">1</div>
+<div class="step-content">
+<h3>Sign Up for AWS</h3>
+<p>Navigate to the AWS homepage and click "Create an AWS Account." You'll need:</p>
+<ul class="checklist">
+<li>A valid email address (this becomes your Root User)</li>
+<li>A credit or debit card (for verification, won't be charged in Free Tier)</li>
+<li>A phone number for identity verification</li>
+<li>Government-issued ID (sometimes required for verification)</li>
+</ul>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">URL</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code>https://aws.amazon.com/free</code></pre>
+</div>
+</div>
+</div>
+<div class="step">
+<div class="step-number">2</div>
+<div class="step-content">
+<h3>Choose Account Type</h3>
+<p>Select <strong>Personal</strong> for learning. Complete the contact information form with your real details - AWS verifies identity and may suspend accounts with false information.</p>
+<div class="info-box warning">
+<div class="info-box-icon">&#9888;&#65039;</div>
+<div class="info-box-content"><strong>Important</strong><p>Use your real name and address. AWS may request ID verification. Fake information leads to account suspension.</p></div>
+</div>
+</div>
+</div>
+<div class="step">
+<div class="step-number">3</div>
+<div class="step-content">
+<h3>Enter Payment Information</h3>
+<p>AWS requires a valid payment method for identity verification. With the Free Tier, you won't be charged for eligible services within limits. Set up <strong>Billing Alerts</strong> immediately after account creation.</p>
+</div>
+</div>
+<div class="step">
+<div class="step-number">4</div>
+<div class="step-content">
+<h3>Verify Your Identity</h3>
+<p>AWS will call or text your phone with a verification code. Enter it to proceed. Some regions may require additional ID document upload.</p>
+</div>
+</div>
+<div class="step">
+<div class="step-number">5</div>
+<div class="step-content">
+<h3>Select Support Plan</h3>
+<p>For learning, choose the <strong>Basic Support Plan</strong> (Free). It includes:</p>
+<ul class="checklist">
+<li>Customer Service &amp; Communities (24/7)</li>
+<li>AWS Trusted Advisor (7 core checks)</li>
+<li>AWS Personal Health Dashboard</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="info-box danger reveal">
+<div class="info-box-icon">&#128680;</div>
+<div class="info-box-content"><strong>Critical Security Step - Do This NOW</strong><p>Once logged in, immediately enable MFA (Multi-Factor Authentication) on your Root Account. Go to IAM &rarr; Dashboard &rarr; "Add MFA" &rarr; Virtual MFA device. Use Google Authenticator, Authy, or 1Password. <strong>Never use the Root Account for daily operations.</strong></p></div>
+</div>
+</div>
+</section>
+
+<section id="iam" style="background:var(--bg-secondary);">
+<div class="container">
+<div class="section-header reveal">
+<div class="section-tag">Chapter 04</div>
+<h2 class="section-title">Identity &amp; Access Management (IAM)</h2>
+<p class="section-desc">IAM is the foundation of AWS security. Master it, and you've mastered half of AWS security. Ignore it, and you will have a very bad day.</p>
+</div>
+<div class="reveal">
+<h3 style="margin-bottom:1.5rem;font-size:1.5rem;">IAM Core Concepts</h3>
+<div class="card-grid">
+<div class="card"><div class="card-icon">&#128100;</div><h3>Users</h3><p>Individual people or applications that need access. Each user has unique security credentials. Never share credentials between users.</p></div>
+<div class="card"><div class="card-icon">&#128101;</div><h3>Groups</h3><p>Collections of users with shared permissions. Example: "Developers" group gets EC2 and S3 access. Add a user to a group, they inherit all permissions.</p></div>
+<div class="card"><div class="card-icon">&#128220;</div><h3>Policies</h3><p>JSON documents that define permissions. Attach policies to users, groups, or roles. Follow least privilege - grant only what's needed.</p></div>
+<div class="card"><div class="card-icon">&#127917;</div><h3>Roles</h3><p>Temporary credentials for AWS services or federated users. An EC2 instance assumes a role to access S3. No permanent credentials stored.</p></div>
+</div>
+<h3 style="margin:3rem 0 1.5rem;font-size:1.5rem;">Creating Your First IAM Admin User</h3>
+<div class="terminal">
+<div class="terminal-header"><div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div><span class="terminal-title">AWS Management Console</span></div>
+<div class="terminal-body">
+<div><span class="terminal-prompt">Step 1:</span> <span class="terminal-command">Navigate to IAM Dashboard</span></div>
+<div class="terminal-output">Services &rarr; IAM &rarr; Users &rarr; Add User</div>
+<div style="margin-top:12px;"><span class="terminal-prompt">Step 2:</span> <span class="terminal-command">Configure User Details</span></div>
+<div class="terminal-output">User name: admin-yourname</div>
+<div class="terminal-output">Access type: [x] AWS Management Console access</div>
+<div class="terminal-output">Console password: Custom password</div>
+<div class="terminal-output">Require password reset: [ ] (uncheck for yourself)</div>
+<div style="margin-top:12px;"><span class="terminal-prompt">Step 3:</span> <span class="terminal-command">Set Permissions</span></div>
+<div class="terminal-output">Attach existing policies directly &rarr; AdministratorAccess</div>
+<div style="margin-top:12px;"><span class="terminal-prompt">Step 4:</span> <span class="terminal-command">Review and Create</span></div>
+<div class="terminal-output">Tags: Name = Your Name (optional but recommended)</div>
+<div class="terminal-output">Click "Create user" &rarr; Download .csv credentials</div>
+</div>
+</div>
+<h3 style="margin:3rem 0 1.5rem;font-size:1.5rem;">IAM Policy Examples</h3>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">JSON</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code>{
+  <span class="string">"Version"</span>: <span class="string">"2012-10-17"</span>,
+  <span class="string">"Statement"</span>: [
+    {
+      <span class="string">"Sid"</span>: <span class="string">"FullS3AccessToSpecificBucket"</span>,
+      <span class="string">"Effect"</span>: <span class="string">"Allow"</span>,
+      <span class="string">"Action"</span>: [
+        <span class="string">"s3:ListBucket"</span>,
+        <span class="string">"s3:GetObject"</span>,
+        <span class="string">"s3:PutObject"</span>,
+        <span class="string">"s3:DeleteObject"</span>
+      ],
+      <span class="string">"Resource"</span>: [
+        <span class="string">"arn:aws:s3:::my-app-bucket"</span>,
+        <span class="string">"arn:aws:s3:::my-app-bucket/*"</span>
+      ]
+    }
+  ]
+}</code></pre>
+</div>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">JSON</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code>{
+  <span class="string">"Version"</span>: <span class="string">"2012-10-17"</span>,
+  <span class="string">"Statement"</span>: [
+    {
+      <span class="string">"Sid"</span>: <span class="string">"EC2ReadOnlyWithCondition"</span>,
+      <span class="string">"Effect"</span>: <span class="string">"Allow"</span>,
+      <span class="string">"Action"</span>: [
+        <span class="string">"ec2:DescribeInstances"</span>,
+        <span class="string">"ec2:DescribeVolumes"</span>,
+        <span class="string">"ec2:DescribeSnapshots"</span>
+      ],
+      <span class="string">"Resource"</span>: <span class="string">"*"</span>,
+      <span class="string">"Condition"</span>: {
+        <span class="string">"StringEquals"</span>: {
+          <span class="string">"aws:RequestedRegion"</span>: [<span class="string">"us-east-1"</span>, <span class="string">"eu-west-1"</span>]
+        }
+      }
+    }
+  ]
+}</code></pre>
+</div>
+<div class="info-box tip reveal">
+<div class="info-box-icon">&#128161;</div>
+<div class="info-box-content"><strong>IAM Best Practices</strong><p>1. Never use Root Account for daily tasks<br>2. Enable MFA on Root and all Admin users<br>3. Use Groups to assign permissions, not individual users<br>4. Rotate access keys every 90 days<br>5. Use Roles for EC2/Lambda, not hardcoded credentials<br>6. Regularly audit with IAM Credential Report</p></div>
+</div>
+</div>
+</div>
+</section>
+<section id="cli">
+<div class="container">
+<div class="section-header reveal">
+<div class="section-tag">Chapter 05</div>
+<h2 class="section-title">AWS CLI Installation</h2>
+<p class="section-desc">The AWS Command Line Interface is your Swiss Army knife. It unlocks the full power of AWS and is essential for automation and scripting.</p>
+</div>
+<div class="reveal">
+<h3 style="margin-bottom:1.5rem;font-size:1.5rem;">Installation Steps</h3>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">macOS (Homebrew)</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Install AWS CLI v2 using Homebrew</span>
+brew install awscli
+
+<span class="comment"># Verify installation</span>
+aws --version
+<span class="comment"># Expected: aws-cli/2.x.x Python/3.x.x Darwin/xx.x.x source/arm64</span></code></pre>
+</div>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Linux</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Download and install AWS CLI v2</span>
+curl <span class="string">"https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"</span> -o <span class="string">"awscliv2.zip"</span>
+unzip awscliv2.zip
+sudo ./aws/install
+
+<span class="comment"># Verify</span>
+aws --version</code></pre>
+</div>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Windows (PowerShell)</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Download MSI installer</span>
+msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
+
+<span class="comment"># Or use Windows Package Manager</span>
+winget install Amazon.AWSCLI
+
+<span class="comment"># Verify in PowerShell</span>
+aws --version</code></pre>
+</div>
+<h3 style="margin:3rem 0 1.5rem;font-size:1.5rem;">Configuration</h3>
+<div class="terminal">
+<div class="terminal-header"><div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div><span class="terminal-title">Terminal</span></div>
+<div class="terminal-body">
+<div><span class="terminal-prompt">$</span> <span class="terminal-command">aws configure</span></div>
+<div class="terminal-output">AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE</div>
+<div class="terminal-output">AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY</div>
+<div class="terminal-output">Default region name [None]: us-east-1</div>
+<div class="terminal-output">Default output format [None]: json</div>
+</div>
+</div>
+<div class="info-box info reveal">
+<div class="info-box-icon">&#8505;&#65039;</div>
+<div class="info-box-content"><strong>Where to get credentials?</strong><p>Go to IAM &rarr; Users &rarr; [Your Admin User] &rarr; Security credentials &rarr; Create access key. Select "Command Line Interface (CLI)" and click the checkbox. <strong>Download the .csv file immediately</strong> - you cannot retrieve the Secret Access Key again.</p></div>
+</div>
+<h3 style="margin:3rem 0 1.5rem;font-size:1.5rem;">Essential AWS CLI Commands</h3>
+<div class="table-container">
+<table>
+<thead><tr><th>Command</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code class="inline">aws s3 ls</code></td><td>List all S3 buckets</td></tr>
+<tr><td><code class="inline">aws ec2 describe-instances</code></td><td>List all EC2 instances</td></tr>
+<tr><td><code class="inline">aws iam list-users</code></td><td>List all IAM users</td></tr>
+<tr><td><code class="inline">aws sts get-caller-identity</code></td><td>Verify your identity</td></tr>
+<tr><td><code class="inline">aws configure list</code></td><td>Show current configuration</td></tr>
+<tr><td><code class="inline">aws help</code></td><td>Get help on any service</td></tr>
+</tbody>
+</table>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output: aws sts get-caller-identity</div>
+<pre>{
+    "UserId": "AIDACKCEVSQ6C2EXAMPLE",
+    "Account": "123456789012",
+    "Arn": "arn:aws:iam::123456789012:user/admin-yourname"
+}</pre>
+</div>
+</div>
+</div>
+</section>
+<section id="dev-labs" class="lab-section">
+<div class="container">
+<div class="section-header reveal">
+<div class="section-tag">Chapter 06</div>
+<h2 class="section-title">Development Labs</h2>
+<p class="section-desc">Four hands-on labs designed to build your confidence. Each lab includes architecture diagrams, copy-paste commands, and expected outputs.</p>
+</div>
+
+<!-- LAB 1: S3 Static Website -->
+<div class="lab-card reveal">
+<div class="lab-header">
+<div>
+<div class="lab-title">Lab 1: S3 Static Website Hosting</div>
+<p style="color:var(--text-secondary);margin-top:0.5rem;">Host a static website on S3 with CloudFront CDN</p>
+</div>
+<div class="lab-meta">
+<span class="lab-badge dev">Dev</span>
+<span class="lab-badge time">15 min</span>
+</div>
+</div>
+<div class="lab-body">
+<h4>Architecture</h4>
+<div class="arch-diagram">
++-------------+         +-------------+         +-------------+
+|   User      |-------->| CloudFront  |-------->|     S3      |
+|  (Browser)  |  HTTPS  |    CDN      |  Origin |   Bucket    |
+|             |<--------|  (Edge)     |<--------| (Website)   |
++-------------+  Cache  +-------------+  Fetch  +-------------+
+</div>
+<h4>Prerequisites</h4>
+<ul class="checklist">
+<li>AWS CLI configured with admin access</li>
+<li>Basic HTML file for testing</li>
+</ul>
+<h4>Step 1: Create S3 Bucket</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Set variables</span>
+<span class="keyword">export</span> <span class="function">BUCKET_NAME</span>=<span class="string">"my-awesome-site-$(date +%s)"</span>
+<span class="keyword">export</span> <span class="function">REGION</span>=<span class="string">"us-east-1"</span>
+
+<span class="comment"># Create bucket</span>
+aws s3api create-bucket \
+    --bucket <span class="function">$BUCKET_NAME</span> \
+    --region <span class="function">$REGION</span>
+
+<span class="comment"># Enable static website hosting</span>
+aws s3api put-bucket-website \
+    --bucket <span class="function">$BUCKET_NAME</span> \
+    --website-configuration <span class="string">'{"IndexDocument":{"Suffix":"index.html"},"ErrorDocument":{"Key":"error.html"}}'</span></code></pre>
+</div>
+<h4>Step 2: Create Bucket Policy</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code>cat > bucket-policy.json << <span class="string">'EOF'</span>
+{
+  <span class="string">"Version"</span>: <span class="string">"2012-10-17"</span>,
+  <span class="string">"Statement"</span>: [
+    {
+      <span class="string">"Sid"</span>: <span class="string">"PublicReadGetObject"</span>,
+      <span class="string">"Effect"</span>: <span class="string">"Allow"</span>,
+      <span class="string">"Principal"</span>: <span class="string">"*"</span>,
+      <span class="string">"Action"</span>: <span class="string">"s3:GetObject"</span>,
+      <span class="string">"Resource"</span>: <span class="string">"arn:aws:s3:::$BUCKET_NAME/*"</span>
+    }
+  ]
+}
+<span class="string">EOF</span>
+
+<span class="comment"># Apply policy</span>
+aws s3api put-bucket-policy \
+    --bucket <span class="function">$BUCKET_NAME</span> \
+    --policy file://bucket-policy.json
+
+<span class="comment"># Remove block public access</span>
+aws s3api put-public-access-block \
+    --bucket <span class="function">$BUCKET_NAME</span> \
+    --public-access-block-configuration <span class="string">"BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"</span></code></pre>
+</div>
+<h4>Step 3: Create and Upload Website Files</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code>cat > index.html << <span class="string">'EOF'</span>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My AWS S3 Website&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #0a0e1a; color: #f0f4f8; }
+        h1 { color: #FF9900; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello from AWS S3!&lt;/h1&gt;
+    &lt;p&gt;This website is hosted on Amazon S3&lt;/p&gt;
+    &lt;p&gt;Created by: &lt;strong&gt;AWS Blueprint Lab 1&lt;/strong&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+<span class="string">EOF</span>
+
+<span class="comment"># Upload to S3</span>
+aws s3 cp index.html s3://<span class="function">$BUCKET_NAME</span>/index.html
+aws s3 cp index.html s3://<span class="function">$BUCKET_NAME</span>/error.html
+
+<span class="comment"># Verify upload</span>
+aws s3 ls s3://<span class="function">$BUCKET_NAME</span>/</code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>upload: ./index.html to s3://my-awesome-site-1234567890/index.html
+upload: ./index.html to s3://my-awesome-site-1234567890/error.html
+2026-08-11 18:00:00      312 index.html
+2026-08-11 18:00:00      312 error.html</pre>
+</div>
+<h4>Step 4: Test Your Website</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Get the website URL</span>
+echo <span class="string">"Website URL: http://$BUCKET_NAME.s3-website-$REGION.amazonaws.com"</span>
+
+<span class="comment"># Test with curl</span>
+curl -I http://<span class="function">$BUCKET_NAME</span>.s3-website-<span class="function">$REGION</span>.amazonaws.com</code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>HTTP/1.1 200 OK
+x-amz-id-2: ...
+x-amz-request-id: ...
+Date: Mon, 11 Aug 2026 18:00:00 GMT
+Last-Modified: Mon, 11 Aug 2026 17:55:00 GMT
+Content-Type: text/html
+Content-Length: 312</pre>
+</div>
+<div class="info-box tip">
+<div class="info-box-icon">&#128161;</div>
+<div class="info-box-content"><strong>Next Level</strong><p>To add CloudFront CDN, create a distribution with your S3 bucket as origin. This gives you HTTPS, global edge caching, and DDoS protection. See Lab 4 for the full production setup.</p></div>
+</div>
+</div>
+</div>
+
+<!-- LAB 2: EC2 Web Server -->
+<div class="lab-card reveal">
+<div class="lab-header">
+<div>
+<div class="lab-title">Lab 2: EC2 Web Server with User Data</div>
+<p style="color:var(--text-secondary);margin-top:0.5rem;">Launch an EC2 instance, install a web server, and serve content automatically</p>
+</div>
+<div class="lab-meta">
+<span class="lab-badge dev">Dev</span>
+<span class="lab-badge time">20 min</span>
+</div>
+</div>
+<div class="lab-body">
+<h4>Architecture</h4>
+<div class="arch-diagram">
++-------------+         +-------------+         +-------------+
+|   User      |-------->|   EC2       |-------->   Apache    |
+|  (Browser)  |  HTTP   |  Instance   |  Local  |   Server    |
+|             |<--------|  (t2.micro) |<--------|  (Port 80)  |
++-------------+         +-------------+         +-------------+
+                                |
+                                v
+                        +-------------+
+                        |   User Data |
+                        |  (Bootstrap) |
+                        +-------------+
+</div>
+<h4>Prerequisites</h4>
+<ul class="checklist">
+<li>AWS CLI configured</li>
+<li>VPC with default security group (auto-created)</li>
+</ul>
+<h4>Step 1: Create a Key Pair</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Create a new key pair</span>
+aws ec2 create-key-pair \
+    --key-name aws-blueprint-key \
+    --query <span class="string">'KeyMaterial'</span> \
+    --output text > aws-blueprint-key.pem
+
+<span class="comment"># Set correct permissions</span>
+chmod 400 aws-blueprint-key.pem
+
+<span class="comment"># Verify</span>
+ls -la aws-blueprint-key.pem</code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>-r-------- 1 user user 1678 Aug 11 18:00 aws-blueprint-key.pem</pre>
+</div>
+<h4>Step 2: Create Security Group</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Get your default VPC ID</span>
+<span class="keyword">export</span> <span class="function">VPC_ID</span>=$(aws ec2 describe-vpcs \
+    --filters <span class="string">"Name=is-default,Values=true"</span> \
+    --query <span class="string">'Vpcs[0].VpcId'</span> \
+    --output text)
+
+<span class="comment"># Create security group</span>
+<span class="keyword">export</span> <span class="function">SG_ID</span>=$(aws ec2 create-security-group \
+    --group-name aws-blueprint-sg \
+    --description <span class="string">"Security group for AWS Blueprint lab"</span> \
+    --vpc-id <span class="function">$VPC_ID</span> \
+    --query <span class="string">'GroupId'</span> \
+    --output text)
+
+<span class="comment"># Allow SSH (port 22) and HTTP (port 80)</span>
+aws ec2 authorize-security-group-ingress \
+    --group-id <span class="function">$SG_ID</span> \
+    --protocol tcp \
+    --port 22 \
+    --cidr 0.0.0.0/0
+
+aws ec2 authorize-security-group-ingress \
+    --group-id <span class="function">$SG_ID</span> \
+    --protocol tcp \
+    --port 80 \
+    --cidr 0.0.0.0/0
+
+echo <span class="string">"Security Group ID: $SG_ID"</span></code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>Security Group ID: sg-0123456789abcdef0</pre>
+</div>
+<h4>Step 3: Create User Data Script</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code>cat > user-data.sh << <span class="string">'EOF'</span>
+#!/bin/bash
+yum update -y
+yum install -y httpd
+systemctl start httpd
+systemctl enable httpd
+cat > /var/www/html/index.html << 'HTMLEOF'
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;AWS Blueprint - EC2 Lab&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #0a0e1a; color: #f0f4f8; }
+        h1 { color: #FF9900; }
+        .info { background: rgba(255,153,0,0.1); padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 600px; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello from EC2!&lt;/h1&gt;
+    &lt;div class="info"&gt;
+        &lt;h2&gt;Server Info&lt;/h2&gt;
+        &lt;p&gt;Hostname: $(hostname)&lt;/p&gt;
+        &lt;p&gt;OS: Amazon Linux 2023&lt;/p&gt;
+        &lt;p&gt;Created by: AWS Blueprint Lab 2&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+HTMLEOF
+EOF</code></pre>
+</div>
+<h4>Step 4: Launch EC2 Instance</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Get the latest Amazon Linux 2023 AMI ID</span>
+<span class="keyword">export</span> <span class="function">AMI_ID</span>=$(aws ec2 describe-images \
+    --owners amazon \
+    --filters <span class="string">"Name=name,Values=al2023-ami-*-x86_64"</span> \
+    --query <span class="string">'Images | sort_by(@, &Name) | [-1].ImageId'</span> \
+    --output text)
+
+<span class="comment"># Launch instance</span>
+<span class="keyword">export</span> <span class="function">INSTANCE_ID</span>=$(aws ec2 run-instances \
+    --image-id <span class="function">$AMI_ID</span> \
+    --count 1 \
+    --instance-type t2.micro \
+    --key-name aws-blueprint-key \
+    --security-group-ids <span class="function">$SG_ID</span> \
+    --user-data file://user-data.sh \
+    --query <span class="string">'Instances[0].InstanceId'</span> \
+    --output text)
+
+echo <span class="string">"Instance ID: $INSTANCE_ID"</span></code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>Instance ID: i-0123456789abcdef0</pre>
+</div>
+<h4>Step 5: Get Public IP and Test</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Wait for instance to be running</span>
+aws ec2 wait instance-running --instance-ids <span class="function">$INSTANCE_ID</span>
+
+<span class="comment"># Get public IP</span>
+<span class="keyword">export</span> <span class="function">PUBLIC_IP</span>=$(aws ec2 describe-instances \
+    --instance-ids <span class="function">$INSTANCE_ID</span> \
+    --query <span class="string">'Reservations[0].Instances[0].PublicIpAddress'</span> \
+    --output text)
+
+echo <span class="string">"Public IP: $PUBLIC_IP"</span>
+echo <span class="string">"Website URL: http://$PUBLIC_IP"</span>
+
+<span class="comment"># Test the website</span>
+curl -s http://<span class="function">$PUBLIC_IP</span> | head -20</code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>Public IP: 54.123.45.67
+Website URL: http://54.123.45.67
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;AWS Blueprint - EC2 Lab&lt;/title&gt;
+    ...</pre>
+</div>
+<h4>Step 6: SSH Into Your Instance (Optional)</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># SSH into the instance</span>
+ssh -i aws-blueprint-key.pem ec2-user@<span class="function">$PUBLIC_IP</span>
+
+<span class="comment"># Check Apache status</span>
+sudo systemctl status httpd
+
+<span class="comment"># Check the web files</span>
+ls -la /var/www/html/
+
+<span class="comment"># Exit</span>
+exit</code></pre>
+</div>
+<div class="info-box warning">
+<div class="info-box-icon">&#9888;&#65039;</div>
+<div class="info-box-content"><strong>Cleanup</strong><p>Don't forget to terminate your instance when done to avoid charges: <code class="inline">aws ec2 terminate-instances --instance-ids $INSTANCE_ID</code></p></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="dev-labs" class="lab-section" style="background:linear-gradient(180deg,rgba(255,153,0,0.03) 0%,transparent 100%);">
+<div class="container">
+
+<!-- LAB 3: Lambda API -->
+<div class="lab-card reveal">
+<div class="lab-header">
+<div>
+<div class="lab-title">Lab 3: Serverless API with Lambda &amp; API Gateway</div>
+<p style="color:var(--text-secondary);margin-top:0.5rem;">Build a REST API without managing any servers</p>
+</div>
+<div class="lab-meta">
+<span class="lab-badge dev">Dev</span>
+<span class="lab-badge time">25 min</span>
+</div>
+</div>
+<div class="lab-body">
+<h4>Architecture</h4>
+<div class="arch-diagram">
++-------------+         +-------------+         +-------------+
+|   Client    |-------->| API Gateway |-------->   Lambda    |
+|  (Any App)  |  HTTPS  |   (REST)    |  JSON   |  Function   |
+|             |<--------|             |<--------|  (Python)   |
++-------------+         +-------------+         +-------------+
+</div>
+<h4>Prerequisites</h4>
+<ul class="checklist">
+<li>AWS CLI configured</li>
+<li>Python 3 installed locally</li>
+</ul>
+<h4>Step 1: Create Lambda Function Code</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># lambda_function.py</span>
+<span class="keyword">import</span> json
+
+<span class="keyword">def</span> <span class="function">lambda_handler</span>(event, context):
+    http_method = event.get(<span class="string">'httpMethod'</span>, <span class="string">'GET'</span>)
+    
+    <span class="keyword">if</span> http_method == <span class="string">'GET'</span>:
+        <span class="keyword">return</span> {
+            <span class="string">'statusCode'</span>: 200,
+            <span class="string">'headers'</span>: {
+                <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,
+                <span class="string">'Access-Control-Allow-Origin'</span>: <span class="string">'*'</span>
+            },
+            <span class="string">'body'</span>: json.dumps({
+                <span class="string">'message'</span>: <span class="string">'Hello from AWS Lambda!'</span>,
+                <span class="string">'service'</span>: <span class="string">'AWS Blueprint Lab 3'</span>,
+                <span class="string">'timestamp'</span>: context.aws_request_id
+            })
+        }
+    
+    <span class="keyword">elif</span> http_method == <span class="string">'POST'</span>:
+        body = json.loads(event.get(<span class="string">'body'</span>, <span class="string">'{}'</span>))
+        name = body.get(<span class="string">'name'</span>, <span class="string">'World'</span>)
+        <span class="keyword">return</span> {
+            <span class="string">'statusCode'</span>: 200,
+            <span class="string">'headers'</span>: {
+                <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,
+                <span class="string">'Access-Control-Allow-Origin'</span>: <span class="string">'*'</span>
+            },
+            <span class="string">'body'</span>: json.dumps({
+                <span class="string">'message'</span>: <span class="string">f'Hello, {name}!'</span>,
+                <span class="string">'service'</span>: <span class="string">'AWS Blueprint Lab 3'</span>,
+                <span class="string">'method'</span>: <span class="string">'POST'</span>
+            })
+        }
+    
+    <span class="keyword">return</span> {
+        <span class="string">'statusCode'</span>: 400,
+        <span class="string">'body'</span>: json.dumps({<span class="string">'error'</span>: <span class="string">'Unsupported method'</span>})
+    }</code></pre>
+</div>
+<h4>Step 2: Create IAM Role for Lambda</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Create trust policy</span>
+cat > trust-policy.json << <span class="string">'EOF'</span>
+{
+  <span class="string">"Version"</span>: <span class="string">"2012-10-17"</span>,
+  <span class="string">"Statement"</span>: [
+    {
+      <span class="string">"Effect"</span>: <span class="string">"Allow"</span>,
+      <span class="string">"Principal"</span>: { <span class="string">"Service"</span>: <span class="string">"lambda.amazonaws.com"</span> },
+      <span class="string">"Action"</span>: <span class="string">"sts:AssumeRole"</span>
+    }
+  ]
+}
+<span class="string">EOF</span>
+
+<span class="comment"># Create role</span>
+<span class="keyword">export</span> <span class="function">ROLE_ARN</span>=$(aws iam create-role \
+    --role-name aws-blueprint-lambda-role \
+    --assume-role-policy-document file://trust-policy.json \
+    --query <span class="string">'Role.Arn'</span> \
+    --output text)
+
+<span class="comment"># Attach basic execution policy</span>
+aws iam attach-role-policy \
+    --role-name aws-blueprint-lambda-role \
+    --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+echo <span class="string">"Role ARN: $ROLE_ARN"</span></code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>Role ARN: arn:aws:iam::123456789012:role/aws-blueprint-lambda-role</pre>
+</div>
+<h4>Step 3: Package and Deploy Lambda</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Create deployment package</span>
+zip function.zip lambda_function.py
+
+<span class="comment"># Create Lambda function</span>
+<span class="keyword">export</span> <span class="function">FUNCTION_ARN</span>=$(aws lambda create-function \
+    --function-name aws-blueprint-api \
+    --runtime python3.11 \
+    --role <span class="function">$ROLE_ARN</span> \
+    --handler lambda_function.lambda_handler \
+    --zip-file fileb://function.zip \
+    --query <span class="string">'FunctionArn'</span> \
+    --output text)
+
+echo <span class="string">"Function ARN: $FUNCTION_ARN"</span></code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>Function ARN: arn:aws:lambda:us-east-1:123456789012:function:aws-blueprint-api</pre>
+</div>
+<h4>Step 4: Create API Gateway</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Create REST API</span>
+<span class="keyword">export</span> <span class="function">API_ID</span>=$(aws apigateway create-rest-api \
+    --name <span class="string">'aws-blueprint-api'</span> \
+    --query <span class="string">'id'</span> \
+    --output text)
+
+<span class="comment"># Get root resource ID</span>
+<span class="keyword">export</span> <span class="function">ROOT_ID</span>=$(aws apigateway get-resources \
+    --rest-api-id <span class="function">$API_ID</span> \
+    --query <span class="string">'items[0].id'</span> \
+    --output text)
+
+<span class="comment"># Create /hello resource</span>
+<span class="keyword">export</span> <span class="function">RESOURCE_ID</span>=$(aws apigateway create-resource \
+    --rest-api-id <span class="function">$API_ID</span> \
+    --parent-id <span class="function">$ROOT_ID</span> \
+    --path-part hello \
+    --query <span class="string">'id'</span> \
+    --output text)
+
+<span class="comment"># Create GET method</span>
+aws apigateway put-method \
+    --rest-api-id <span class="function">$API_ID</span> \
+    --resource-id <span class="function">$RESOURCE_ID</span> \
+    --http-method GET \
+    --authorization-type NONE
+
+<span class="comment"># Create POST method</span>
+aws apigateway put-method \
+    --rest-api-id <span class="function">$API_ID</span> \
+    --resource-id <span class="function">$RESOURCE_ID</span> \
+    --http-method POST \
+    --authorization-type NONE
+
+<span class="comment"># Integrate GET with Lambda</span>
+aws apigateway put-integration \
+    --rest-api-id <span class="function">$API_ID</span> \
+    --resource-id <span class="function">$RESOURCE_ID</span> \
+    --http-method GET \
+    --type AWS_PROXY \
+    --integration-http-method POST \
+    --uri <span class="string">"arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/$FUNCTION_ARN/invocations"</span>
+
+<span class="comment"># Integrate POST with Lambda</span>
+aws apigateway put-integration \
+    --rest-api-id <span class="function">$API_ID</span> \
+    --resource-id <span class="function">$RESOURCE_ID</span> \
+    --http-method POST \
+    --type AWS_PROXY \
+    --integration-http-method POST \
+    --uri <span class="string">"arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/$FUNCTION_ARN/invocations"</span>
+
+<span class="comment"># Grant API Gateway permission to invoke Lambda</span>
+aws lambda add-permission \
+    --function-name aws-blueprint-api \
+    --statement-id apigateway-invoke \
+    --action lambda:InvokeFunction \
+    --principal apigateway.amazonaws.com \
+    --source-arn <span class="string">"arn:aws:execute-api:us-east-1:$(aws sts get-caller-identity --query Account --output text):$API_ID/*/GET/hello"</span>
+
+aws lambda add-permission \
+    --function-name aws-blueprint-api \
+    --statement-id apigateway-invoke-post \
+    --action lambda:InvokeFunction \
+    --principal apigateway.amazonaws.com \
+    --source-arn <span class="string">"arn:aws:execute-api:us-east-1:$(aws sts get-caller-identity --query Account --output text):$API_ID/*/POST/hello"</span>
+
+<span class="comment"># Deploy API</span>
+aws apigateway create-deployment \
+    --rest-api-id <span class="function">$API_ID</span> \
+    --stage-name prod
+
+<span class="keyword">export</span> <span class="function">API_URL</span>=<span class="string">"https://$API_ID.execute-api.us-east-1.amazonaws.com/prod/hello"</span>
+echo <span class="string">"API URL: $API_URL"</span></code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>API URL: https://abc123def.execute-api.us-east-1.amazonaws.com/prod/hello</pre>
+</div>
+<h4>Step 5: Test Your API</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Test GET request</span>
+curl -s <span class="function">$API_URL</span> | python3 -m json.tool
+
+<span class="comment"># Test POST request</span>
+curl -s -X POST <span class="function">$API_URL</span> \
+    -H <span class="string">"Content-Type: application/json"</span> \
+    -d <span class="string">'{"name":"AWS Blueprint Student"}'</span> | python3 -m json.tool</code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>{
+    "message": "Hello from AWS Lambda!",
+    "service": "AWS Blueprint Lab 3",
+    "timestamp": "abc123-def456"
+}
+
+{
+    "message": "Hello, AWS Blueprint Student!",
+    "service": "AWS Blueprint Lab 3",
+    "method": "POST"
+}</pre>
+</div>
+<div class="info-box tip">
+<div class="info-box-icon">&#128161;</div>
+<div class="info-box-content"><strong>What You Built</strong><p>A fully serverless REST API that scales to millions of requests automatically. You pay only for the compute time you consume (1 million free requests/month). No servers to manage, patch, or scale.</p></div>
+</div>
+</div>
+</div>
+
+<!-- LAB 4: DynamoDB CRUD -->
+<div class="lab-card reveal">
+<div class="lab-header">
+<div>
+<div class="lab-title">Lab 4: DynamoDB CRUD Operations</div>
+<p style="color:var(--text-secondary);margin-top:0.5rem;">Create a NoSQL database, insert data, query, and manage items</p>
+</div>
+<div class="lab-meta">
+<span class="lab-badge dev">Dev</span>
+<span class="lab-badge time">20 min</span>
+</div>
+</div>
+<div class="lab-body">
+<h4>Architecture</h4>
+<div class="arch-diagram">
++-------------+         +-------------+         +-------------+
+| Application |-------->|  DynamoDB   |<--------|   AWS CLI   |
+|   (Any)     |  CRUD   |  (NoSQL)    |  Admin  |  (Scripts)  |
+|             |<--------|             |-------->|             |
++-------------+         +-------------+         +-------------+
+</div>
+<h4>Prerequisites</h4>
+<ul class="checklist">
+<li>AWS CLI configured</li>
+<li>Basic understanding of JSON</li>
+</ul>
+<h4>Step 1: Create DynamoDB Table</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Create a table for storing user profiles</span>
+aws dynamodb create-table \
+    --table-name aws-blueprint-users \
+    --attribute-definitions \
+        AttributeName=userId,AttributeType=S \
+        AttributeName=email,AttributeType=S \
+    --key-schema \
+        AttributeName=userId,KeyType=HASH \
+    --global-secondary-indexes \
+        <span class="string">'IndexName=EmailIndex,KeySchema=[{AttributeName=email,KeyType=HASH}],Projection={ProjectionType=ALL},ProvisionedThroughput={ReadCapacityUnits=5,WriteCapacityUnits=5}'</span> \
+    --provisioned-throughput \
+        ReadCapacityUnits=5,WriteCapacityUnits=5 \
+    --query <span class="string">'TableDescription.TableStatus'</span> \
+    --output text
+
+<span class="comment"># Wait for table to be active</span>
+aws dynamodb wait table-exists --table-name aws-blueprint-users
+echo <span class="string">"Table created successfully!"</span></code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>CREATING
+Table created successfully!</pre>
+</div>
+<h4>Step 2: Insert Items</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Insert first user</span>
+aws dynamodb put-item \
+    --table-name aws-blueprint-users \
+    --item <span class="string">'{"userId":{"S":"user-001"},"email":{"S":"alice@example.com"},"name":{"S":"Alice Johnson"},"role":{"S":"developer"},"createdAt":{"S":"2026-08-11T10:00:00Z"}}'</span>
+
+<span class="comment"># Insert second user</span>
+aws dynamodb put-item \
+    --table-name aws-blueprint-users \
+    --item <span class="string">'{"userId":{"S":"user-002"},"email":{"S":"bob@example.com"},"name":{"S":"Bob Smith"},"role":{"S":"admin"},"createdAt":{"S":"2026-08-11T11:00:00Z"}}'</span>
+
+<span class="comment"># Insert third user</span>
+aws dynamodb put-item \
+    --table-name aws-blueprint-users \
+    --item <span class="string">'{"userId":{"S":"user-003"},"email":{"S":"carol@example.com"},"name":{"S":"Carol White"},"role":{"S":"developer"},"createdAt":{"S":"2026-08-11T12:00:00Z"}}'</span>
+
+echo <span class="string">"3 users inserted!"</span></code></pre>
+</div>
+<h4>Step 3: Query and Scan</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Get a specific user by ID</span>
+aws dynamodb get-item \
+    --table-name aws-blueprint-users \
+    --key <span class="string">'{"userId":{"S":"user-001"}}'</span> \
+    --query <span class="string">'Item'</span> \
+    --output json | python3 -m json.tool
+
+<span class="comment"># Scan all users</span>
+aws dynamodb scan \
+    --table-name aws-blueprint-users \
+    --query <span class="string">'Items'</span> \
+    --output json | python3 -m json.tool
+
+<span class="comment"># Query by email using GSI</span>
+aws dynamodb query \
+    --table-name aws-blueprint-users \
+    --index-name EmailIndex \
+    --key-condition-expression <span class="string">"email = :email"</span> \
+    --expression-attribute-values <span class="string">'{":email":{"S":"bob@example.com"}}'</span> \
+    --output json | python3 -m json.tool</code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>{
+    "email": {"S": "alice@example.com"},
+    "name": {"S": "Alice Johnson"},
+    "role": {"S": "developer"},
+    "userId": {"S": "user-001"},
+    "createdAt": {"S": "2026-08-11T10:00:00Z"}
+}
+
+[
+    { ...user-001... },
+    { ...user-002... },
+    { ...user-003... }
+]</pre>
+</div>
+<h4>Step 4: Update and Delete</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Update user role</span>
+aws dynamodb update-item \
+    --table-name aws-blueprint-users \
+    --key <span class="string">'{"userId":{"S":"user-001"}}'</span> \
+    --update-expression <span class="string">"SET role = :newRole, updatedAt = :timestamp"</span> \
+    --expression-attribute-values <span class="string">'{":newRole":{"S":"senior-developer"},":timestamp":{"S":"2026-08-11T15:00:00Z"}}'</span> \
+    --return-values ALL_NEW \
+    --query <span class="string">'Attributes'</span> \
+    --output json | python3 -m json.tool
+
+<span class="comment"># Delete a user</span>
+aws dynamodb delete-item \
+    --table-name aws-blueprint-users \
+    --key <span class="string">'{"userId":{"S":"user-003"}}'</span>
+
+<span class="comment"># Verify deletion</span>
+aws dynamodb scan \
+    --table-name aws-blueprint-users \
+    --query <span class="string">'Count'</span> \
+    --output text</code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>{
+    "email": {"S": "alice@example.com"},
+    "name": {"S": "Alice Johnson"},
+    "role": {"S": "senior-developer"},
+    "updatedAt": {"S": "2026-08-11T15:00:00Z"},
+    "userId": {"S": "user-001"}
+}
+
+2</pre>
+</div>
+<h4>Step 5: Cleanup</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Delete the table</span>
+aws dynamodb delete-table --table-name aws-blueprint-users
+
+<span class="comment"># Verify deletion</span>
+aws dynamodb list-tables --query <span class="string">'TableNames'</span> --output json | python3 -m json.tool</code></pre>
+</div>
+<div class="info-box tip">
+<div class="info-box-icon">&#128161;</div>
+<div class="info-box-content"><strong>DynamoDB Tips</strong><p>DynamoDB is fully managed - no servers, no patching, automatic scaling. Use on-demand capacity for unpredictable workloads. The first 25GB and 200 million read/write requests per month are free forever. Design your partition keys carefully for even distribution.</p></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="prod-labs" class="lab-section" style="background:linear-gradient(180deg,rgba(16,185,129,0.03) 0%,transparent 100%);">
+<div class="container">
+<div class="section-header reveal">
+<div class="section-tag">Chapter 07</div>
+<h2 class="section-title">Production Labs</h2>
+<p class="section-desc">Two advanced labs that simulate real-world production scenarios. These teach you how to build resilient, secure, and scalable infrastructure.</p>
+</div>
+
+<!-- PROD LAB 1: Multi-AZ VPC + ALB + Auto Scaling -->
+<div class="lab-card reveal">
+<div class="lab-header">
+<div>
+<div class="lab-title">Prod Lab 1: Multi-AZ Web Application with Auto Scaling</div>
+<p style="color:var(--text-secondary);margin-top:0.5rem;">Build a production-ready web app with VPC, ALB, Auto Scaling across multiple AZs</p>
+</div>
+<div class="lab-meta">
+<span class="lab-badge prod">Prod</span>
+<span class="lab-badge time">45 min</span>
+</div>
+</div>
+<div class="lab-body">
+<h4>Architecture</h4>
+<div class="arch-diagram">
+                                    +-------------+
+                                    |   Route 53  |
+                                    |   (DNS)     |
+                                    +------+------+
+                                           |
+                                           v
++------------------+              +------------------+
+|    Internet      |<------------>|   ALB (Public)   |
+|                  |     HTTPS    |  (Multi-AZ)      |
++------------------+              +--------+---------+
+                                           |
+                    +----------------------+----------------------+
+                    |                      |                      |
+                    v                      v                      v
+           +----------------+    +----------------+    +----------------+
+           |   AZ-1a        |    |   AZ-1b        |    |   AZ-1c        |
+           | +------------+ |    | +------------+ |    | +------------+ |
+           | | EC2 (ASG)  | |    | | EC2 (ASG)  | |    | | EC2 (ASG)  | |
+           | |  t3.micro  | |    | |  t3.micro  | |    | |  t3.micro  | |
+           | +------+-----+ |    | +------+-----+ |    | +------+-----+ |
+           |        |       |    |        |       |    |        |       |
+           |        v       |    |        v       |    |        v       |
+           | +------------+ |    | +------------+ |    | +------------+ |
+           | |  RDS       |<|----|>|  RDS       |<|----|>|  RDS       | |
+           | | (Multi-AZ) | |    | | (Multi-AZ) | |    | | (Multi-AZ) | |
+           | +------------+ |    | +------------+ |    | +------------+ |
+           +----------------+    +----------------+    +----------------+
+</div>
+<h4>Prerequisites</h4>
+<ul class="checklist">
+<li>AWS CLI with admin access</li>
+<li>Understanding of VPC, subnets, and security groups</li>
+<li>Budget awareness (uses t3.micro - within Free Tier)</li>
+</ul>
+<h4>Step 1: Create VPC and Subnets</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="keyword">export</span> <span class="function">REGION</span>=<span class="string">"us-east-1"</span>
+<span class="keyword">export</span> <span class="function">VPC_CIDR</span>=<span class="string">"10.0.0.0/16"</span>
+
+<span class="comment"># Create VPC</span>
+<span class="keyword">export</span> <span class="function">VPC_ID</span>=$(aws ec2 create-vpc \
+    --cidr-block <span class="function">$VPC_CIDR</span> \
+    --tag-specifications <span class="string">'ResourceType=vpc,Tags=[{Key=Name,Value=aws-blueprint-vpc}]'</span> \
+    --query <span class="string">'Vpc.VpcId'</span> --output text)
+
+echo <span class="string">"VPC ID: $VPC_ID"</span>
+
+<span class="comment"># Create Internet Gateway</span>
+<span class="keyword">export</span> <span class="function">IGW_ID</span>=$(aws ec2 create-internet-gateway \
+    --tag-specifications <span class="string">'ResourceType=internet-gateway,Tags=[{Key=Name,Value=aws-blueprint-igw}]'</span> \
+    --query <span class="string">'InternetGateway.InternetGatewayId'</span> --output text)
+
+aws ec2 attach-internet-gateway --internet-gateway-id <span class="function">$IGW_ID</span> --vpc-id <span class="function">$VPC_ID</span>
+
+<span class="comment"># Create public subnets in 3 AZs</span>
+<span class="keyword">export</span> <span class="function">SUBNET1</span>=$(aws ec2 create-subnet \
+    --vpc-id <span class="function">$VPC_ID</span> --cidr-block <span class="string">"10.0.1.0/24"</span> --availability-zone <span class="string">"${REGION}a"</span> \
+    --tag-specifications <span class="string">'ResourceType=subnet,Tags=[{Key=Name,Value=public-1a}]'</span> \
+    --query <span class="string">'Subnet.SubnetId'</span> --output text)
+
+<span class="keyword">export</span> <span class="function">SUBNET2</span>=$(aws ec2 create-subnet \
+    --vpc-id <span class="function">$VPC_ID</span> --cidr-block <span class="string">"10.0.2.0/24"</span> --availability-zone <span class="string">"${REGION}b"</span> \
+    --tag-specifications <span class="string">'ResourceType=subnet,Tags=[{Key=Name,Value=public-1b}]'</span> \
+    --query <span class="string">'Subnet.SubnetId'</span> --output text)
+
+<span class="keyword">export</span> <span class="function">SUBNET3</span>=$(aws ec2 create-subnet \
+    --vpc-id <span class="function">$VPC_ID</span> --cidr-block <span class="string">"10.0.3.0/24"</span> --availability-zone <span class="string">"${REGION}c"</span> \
+    --tag-specifications <span class="string">'ResourceType=subnet,Tags=[{Key=Name,Value=public-1c}]'</span> \
+    --query <span class="string">'Subnet.SubnetId'</span> --output text)
+
+<span class="comment"># Create route table and associate</span>
+<span class="keyword">export</span> <span class="function">RT_ID</span>=$(aws ec2 create-route-table --vpc-id <span class="function">$VPC_ID</span> \
+    --tag-specifications <span class="string">'ResourceType=route-table,Tags=[{Key=Name,Value=public-rt}]'</span> \
+    --query <span class="string">'RouteTable.RouteTableId'</span> --output text)
+
+aws ec2 create-route --route-table-id <span class="function">$RT_ID</span> --destination-cidr-block 0.0.0.0/0 --gateway-id <span class="function">$IGW_ID</span>
+
+<span class="keyword">for</span> subnet <span class="keyword">in</span> <span class="function">$SUBNET1 $SUBNET2 $SUBNET3</span>; <span class="keyword">do</span>
+    aws ec2 associate-route-table --route-table-id <span class="function">$RT_ID</span> --subnet-id <span class="function">$subnet</span>
+    aws ec2 modify-subnet-attribute --subnet-id <span class="function">$subnet</span> --map-public-ip-on-launch
+<span class="keyword">done</span>
+
+echo <span class="string">"VPC Setup Complete!"</span>
+echo <span class="string">"Subnets: $SUBNET1, $SUBNET2, $SUBNET3"</span></code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>VPC ID: vpc-0123456789abcdef0
+VPC Setup Complete!
+Subnets: subnet-0abc..., subnet-0def..., subnet-0ghi...</pre>
+</div>
+<h4>Step 2: Create Security Groups</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># ALB Security Group</span>
+<span class="keyword">export</span> <span class="function">ALB_SG</span>=$(aws ec2 create-security-group \
+    --group-name alb-sg --description <span class="string">"ALB Security Group"</span> --vpc-id <span class="function">$VPC_ID</span> \
+    --query <span class="string">'GroupId'</span> --output text)
+
+aws ec2 authorize-security-group-ingress --group-id <span class="function">$ALB_SG</span> \
+    --protocol tcp --port 80 --cidr 0.0.0.0/0
+
+aws ec2 authorize-security-group-ingress --group-id <span class="function">$ALB_SG</span> \
+    --protocol tcp --port 443 --cidr 0.0.0.0/0
+
+<span class="comment"># EC2 Security Group</span>
+<span class="keyword">export</span> <span class="function">EC2_SG</span>=$(aws ec2 create-security-group \
+    --group-name ec2-sg --description <span class="string">"EC2 Security Group"</span> --vpc-id <span class="function">$VPC_ID</span> \
+    --query <span class="string">'GroupId'</span> --output text)
+
+aws ec2 authorize-security-group-ingress --group-id <span class="function">$EC2_SG</span> \
+    --protocol tcp --port 80 --source-group <span class="function">$ALB_SG</span>
+
+aws ec2 authorize-security-group-ingress --group-id <span class="function">$EC2_SG</span> \
+    --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+echo <span class="string">"ALB SG: $ALB_SG"</span>
+echo <span class="string">"EC2 SG: $EC2_SG"</span></code></pre>
+</div>
+<h4>Step 3: Create Launch Template and Auto Scaling</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Get latest Amazon Linux AMI</span>
+<span class="keyword">export</span> <span class="function">AMI_ID</span>=$(aws ec2 describe-images --owners amazon \
+    --filters <span class="string">"Name=name,Values=al2023-ami-*-x86_64"</span> \
+    --query <span class="string">'Images | sort_by(@, &Name) | [-1].ImageId'</span> --output text)
+
+<span class="comment"># Create user data</span>
+cat > prod-user-data.sh << <span class="string">'EOF'</span>
+#!/bin/bash
+yum update -y
+yum install -y httpd php
+systemctl start httpd
+systemctl enable httpd
+cat > /var/www/html/index.php << 'PHPEOF'
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;AWS Blueprint - Prod Lab&lt;/title&gt;
+&lt;style&gt;body{font-family:Arial,sans-serif;text-align:center;padding:50px;background:#0a0e1a;color:#f0f4f8;}h1{color:#FF9900;}.info{background:rgba(255,153,0,0.1);padding:20px;border-radius:10px;margin:20px auto;max-width:600px;}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Production Web App&lt;/h1&gt;
+&lt;div class="info"&gt;
+&lt;h2&gt;Server Details&lt;/h2&gt;
+&lt;p&gt;AZ: &lt;?php echo file_get_contents('http://169.254.169.254/latest/meta-data/placement/availability-zone'); ?&gt;&lt;/p&gt;
+&lt;p&gt;Instance ID: &lt;?php echo file_get_contents('http://169.254.169.254/latest/meta-data/instance-id'); ?&gt;&lt;/p&gt;
+&lt;p&gt;Private IP: &lt;?php echo file_get_contents('http://169.254.169.254/latest/meta-data/local-ipv4'); ?&gt;&lt;/p&gt;
+&lt;p&gt;Created by: AWS Blueprint Prod Lab 1&lt;/p&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+PHPEOF
+EOF
+
+<span class="comment"># Create Launch Template</span>
+aws ec2 create-launch-template \
+    --launch-template-name aws-blueprint-launch-template \
+    --launch-template-data <span class="string">"ImageId=$AMI_ID,InstanceType=t3.micro,SecurityGroupIds=['$EC2_SG'],UserData=$(base64 -w 0 prod-user-data.sh),TagSpecifications=[{ResourceType=instance,Tags=[{Key=Name,Value=aws-blueprint-asg-instance}]}]"</span>
+
+<span class="comment"># Create Target Group</span>
+<span class="keyword">export</span> <span class="function">TG_ARN</span>=$(aws elbv2 create-target-group \
+    --name aws-blueprint-tg --protocol HTTP --port 80 --vpc-id <span class="function">$VPC_ID</span> \
+    --health-check-path /index.php --target-type instance \
+    --query <span class="string">'TargetGroups[0].TargetGroupArn'</span> --output text)
+
+<span class="comment"># Create Auto Scaling Group</span>
+aws autoscaling create-auto-scaling-group \
+    --auto-scaling-group-name aws-blueprint-asg \
+    --launch-template LaunchTemplateName=aws-blueprint-launch-template,Version=<span class="string">'$Latest'</span> \
+    --min-size 2 --max-size 6 --desired-capacity 3 \
+    --target-group-arns <span class="function">$TG_ARN</span> \
+    --vpc-zone-identifier <span class="string">"$SUBNET1,$SUBNET2,$SUBNET3"</span> \
+    --health-check-type ELB --health-check-grace-period 300 \
+    --tags Key=Name,Value=aws-blueprint-asg-instance,PropagateAtLaunch=true
+
+<span class="comment"># Create scaling policy</span>
+aws autoscaling put-scaling-policy \
+    --auto-scaling-group-name aws-blueprint-asg \
+    --policy-name cpu-scale-up --policy-type TargetTrackingScaling \
+    --target-tracking-configuration <span class="string">'PredefinedMetricSpecification={PredefinedMetricType=ASGAverageCPUUtilization},TargetValue=60.0'</span>
+
+echo <span class="string">"Auto Scaling Group Created!"</span></code></pre>
+</div>
+<h4>Step 4: Create Application Load Balancer</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Create ALB</span>
+<span class="keyword">export</span> <span class="function">ALB_ARN</span>=$(aws elbv2 create-load-balancer \
+    --name aws-blueprint-alb --type application \
+    --subnets <span class="function">$SUBNET1 $SUBNET2 $SUBNET3</span> \
+    --security-groups <span class="function">$ALB_SG</span> \
+    --query <span class="string">'LoadBalancers[0].LoadBalancerArn'</span> --output text)
+
+<span class="comment"># Create Listener</span>
+aws elbv2 create-listener \
+    --load-balancer-arn <span class="function">$ALB_ARN</span> --protocol HTTP --port 80 \
+    --default-actions Type=forward,TargetGroupArn=<span class="function">$TG_ARN</span>
+
+<span class="comment"># Wait for ALB to be active</span>
+aws elbv2 wait load-balancer-available --load-balancer-arns <span class="function">$ALB_ARN</span>
+
+<span class="comment"># Get ALB DNS</span>
+<span class="keyword">export</span> <span class="function">ALB_DNS</span>=$(aws elbv2 describe-load-balancers \
+    --load-balancer-arns <span class="function">$ALB_ARN</span> \
+    --query <span class="string">'LoadBalancers[0].DNSName'</span> --output text)
+
+echo <span class="string">"ALB DNS: $ALB_DNS"</span>
+echo <span class="string">"Website URL: http://$ALB_DNS"</span></code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>ALB DNS: aws-blueprint-alb-123456789.us-east-1.elb.amazonaws.com
+Website URL: http://aws-blueprint-alb-123456789.us-east-1.elb.amazonaws.com</pre>
+</div>
+<h4>Step 5: Test and Verify</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Test the load balancer</span>
+curl -s http://<span class="function">$ALB_DNS</span> | grep -E <span class="string">"AZ:|Instance ID:"</span>
+
+<span class="comment"># Test multiple times to see different instances</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> {1..5}; <span class="keyword">do</span>
+    echo <span class="string">"--- Request $i ---"</span>
+    curl -s http://<span class="function">$ALB_DNS</span> | grep <span class="string">"Instance ID:"</span>
+<span class="keyword">done</span>
+
+<span class="comment"># Check Auto Scaling instances</span>
+aws autoscaling describe-auto-scaling-groups \
+    --auto-scaling-group-names aws-blueprint-asg \
+    --query <span class="string">'AutoScalingGroups[0].Instances'</span> --output json | python3 -m json.tool</code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>--- Request 1 ---
+&lt;p&gt;Instance ID: i-0abc123def456&lt;/p&gt;
+--- Request 2 ---
+&lt;p&gt;Instance ID: i-0def789ghi012&lt;/p&gt;
+--- Request 3 ---
+&lt;p&gt;Instance ID: i-0jkl345mno678&lt;/p&gt;
+
+[
+    {"InstanceId": "i-0abc...", "LifecycleState": "InService"},
+    {"InstanceId": "i-0def...", "LifecycleState": "InService"},
+    {"InstanceId": "i-0jkl...", "LifecycleState": "InService"}
+]</pre>
+</div>
+<div class="info-box warning">
+<div class="info-box-icon">&#9888;&#65039;</div>
+<div class="info-box-content"><strong>Cleanup Commands</strong><p>Delete in this order: ALB &rarr; Target Group &rarr; Auto Scaling Group &rarr; Launch Template &rarr; Security Groups &rarr; Subnets &rarr; Route Table &rarr; IGW &rarr; VPC. Or use the AWS Console for easier cleanup.</p></div>
+</div>
+</div>
+</div>
+
+<!-- PROD LAB 2: CI/CD Pipeline -->
+<div class="lab-card reveal">
+<div class="lab-header">
+<div>
+<div class="lab-title">Prod Lab 2: CI/CD Pipeline with CodePipeline + CodeBuild</div>
+<p style="color:var(--text-secondary);margin-top:0.5rem;">Build a fully automated deployment pipeline that builds, tests, and deploys on every code push</p>
+</div>
+<div class="lab-meta">
+<span class="lab-badge prod">Prod</span>
+<span class="lab-badge time">40 min</span>
+</div>
+</div>
+<div class="lab-body">
+<h4>Architecture</h4>
+<div class="arch-diagram">
++-------------+    +-------------+    +-------------+    +-------------+
+|   GitHub    |--&gt;| CodePipeline|--&gt;|  CodeBuild  |--&gt;|     S3      |
+|   (Source)  |    |  (Orchestr.)|    |   (Build)   |    |  (Deploy)   |
+|             |    |             |    |             |    |             |
++-------------+    +-------------+    +-------------+    +-------------+
+                          |                                     |
+                          v                                     v
+                   +-------------+                      +-------------+
+                   | CloudWatch  |                      | CloudFront  |
+                   |  (Logs)     |                      |   (CDN)     |
+                   +-------------+                      +-------------+
+</div>
+<h4>Prerequisites</h4>
+<ul class="checklist">
+<li>AWS CLI with admin access</li>
+<li>GitHub account with a repository</li>
+<li>GitHub Personal Access Token (repo scope)</li>
+</ul>
+<h4>Step 1: Create S3 Bucket for Artifacts</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="keyword">export</span> <span class="function">ARTIFACT_BUCKET</span>=<span class="string">"aws-blueprint-artifacts-$(aws sts get-caller-identity --query Account --output text)"</span>
+
+aws s3api create-bucket \
+    --bucket <span class="function">$ARTIFACT_BUCKET</span> \
+    --region us-east-1
+
+aws s3api put-bucket-versioning \
+    --bucket <span class="function">$ARTIFACT_BUCKET</span> \
+    --versioning-configuration Status=Enabled
+
+echo <span class="string">"Artifact Bucket: $ARTIFACT_BUCKET"</span></code></pre>
+</div>
+<h4>Step 2: Create IAM Role for CodeBuild</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Trust policy for CodeBuild</span>
+cat > codebuild-trust.json << <span class="string">'EOF'</span>
+{
+  <span class="string">"Version"</span>: <span class="string">"2012-10-17"</span>,
+  <span class="string">"Statement"</span>: [
+    {
+      <span class="string">"Effect"</span>: <span class="string">"Allow"</span>,
+      <span class="string">"Principal"</span>: { <span class="string">"Service"</span>: <span class="string">"codebuild.amazonaws.com"</span> },
+      <span class="string">"Action"</span>: <span class="string">"sts:AssumeRole"</span>
+    }
+  ]
+}
+<span class="string">EOF</span>
+
+<span class="keyword">export</span> <span class="function">CODEBUILD_ROLE</span>=$(aws iam create-role \
+    --role-name aws-blueprint-codebuild-role \
+    --assume-role-policy-document file://codebuild-trust.json \
+    --query <span class="string">'Role.Arn'</span> --output text)
+
+<span class="comment"># Attach policies</span>
+aws iam attach-role-policy --role-name aws-blueprint-codebuild-role \
+    --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess
+aws iam attach-role-policy --role-name aws-blueprint-codebuild-role \
+    --policy-arn arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+aws iam attach-role-policy --role-name aws-blueprint-codebuild-role \
+    --policy-arn arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess
+
+echo <span class="string">"CodeBuild Role: $CODEBUILD_ROLE"</span></code></pre>
+</div>
+<h4>Step 3: Create IAM Role for CodePipeline</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Trust policy for CodePipeline</span>
+cat > codepipeline-trust.json << <span class="string">'EOF'</span>
+{
+  <span class="string">"Version"</span>: <span class="string">"2012-10-17"</span>,
+  <span class="string">"Statement"</span>: [
+    {
+      <span class="string">"Effect"</span>: <span class="string">"Allow"</span>,
+      <span class="string">"Principal"</span>: { <span class="string">"Service"</span>: <span class="string">"codepipeline.amazonaws.com"</span> },
+      <span class="string">"Action"</span>: <span class="string">"sts:AssumeRole"</span>
+    }
+  ]
+}
+<span class="string">EOF</span>
+
+<span class="keyword">export</span> <span class="function">PIPELINE_ROLE</span>=$(aws iam create-role \
+    --role-name aws-blueprint-pipeline-role \
+    --assume-role-policy-document file://codepipeline-trust.json \
+    --query <span class="string">'Role.Arn'</span> --output text)
+
+<span class="comment"># Inline policy for CodePipeline</span>
+cat > pipeline-policy.json << <span class="string">'EOF'</span>
+{
+  <span class="string">"Version"</span>: <span class="string">"2012-10-17"</span>,
+  <span class="string">"Statement"</span>: [
+    {
+      <span class="string">"Effect"</span>: <span class="string">"Allow"</span>,
+      <span class="string">"Action"</span>: [
+        <span class="string">"s3:GetObject"</span>, <span class="string">"s3:GetObjectVersion"</span>, <span class="string">"s3:GetBucketVersioning"</span>,
+        <span class="string">"s3:PutObject"</span>, <span class="string">"s3:ListBucket"</span>, <span class="string">"codebuild:BatchGetBuilds"</span>,
+        <span class="string">"codebuild:StartBuild"</span>, <span class="string">"codestar-connections:UseConnection"</span>
+      ],
+      <span class="string">"Resource"</span>: <span class="string">"*"</span>
+    }
+  ]
+}
+<span class="string">EOF</span>
+
+aws iam put-role-policy --role-name aws-blueprint-pipeline-role \
+    --policy-name pipeline-policy --policy-document file://pipeline-policy.json
+
+echo <span class="string">"Pipeline Role: $PIPELINE_ROLE"</span></code></pre>
+</div>
+<h4>Step 4: Create CodeBuild Project</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Create buildspec.yml content</span>
+cat > buildspec.yml << <span class="string">'EOF'</span>
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - echo "Installing dependencies..."
+      - npm install
+  build:
+    commands:
+      - echo "Building application..."
+      - npm run build
+      - echo "Running tests..."
+      - npm test || true
+  post_build:
+    commands:
+      - echo "Build completed on $(date)"
+      - echo "Deploying to S3..."
+      - aws s3 sync build/ s3://$DEPLOY_BUCKET/ --delete
+artifacts:
+  files:
+    - build/**/*
+  discard-paths: no
+EOF
+
+<span class="comment"># Create CodeBuild project</span>
+aws codebuild create-project \
+    --name aws-blueprint-build \
+    --source type=S3,location=<span class="function">$ARTIFACT_BUCKET</span>/source.zip \
+    --artifacts type=S3,location=<span class="function">$ARTIFACT_BUCKET</span>/build-output \
+    --environment type=LINUX_CONTAINER,image=aws/codebuild/standard:7.0,computeType=BUILD_GENERAL1_SMALL \
+    --service-role <span class="function">$CODEBUILD_ROLE</span> \
+    --timeout-in-minutes 30
+
+echo <span class="string">"CodeBuild Project Created!"</span></code></pre>
+</div>
+<h4>Step 5: Create S3 Deployment Bucket</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="keyword">export</span> <span class="function">DEPLOY_BUCKET</span>=<span class="string">"aws-blueprint-prod-site-$(aws sts get-caller-identity --query Account --output text)"</span>
+
+aws s3api create-bucket --bucket <span class="function">$DEPLOY_BUCKET</span> --region us-east-1
+
+<span class="comment"># Enable static website hosting</span>
+aws s3api put-bucket-website --bucket <span class="function">$DEPLOY_BUCKET</span> \
+    --website-configuration <span class="string">'{"IndexDocument":{"Suffix":"index.html"},"ErrorDocument":{"Key":"error.html"}}'</span>
+
+<span class="comment"># Bucket policy for public read</span>
+cat > deploy-policy.json << <span class="string">'EOF'</span>
+{
+  <span class="string">"Version"</span>: <span class="string">"2012-10-17"</span>,
+  <span class="string">"Statement"</span>: [
+    {
+      <span class="string">"Sid"</span>: <span class="string">"PublicReadGetObject"</span>,
+      <span class="string">"Effect"</span>: <span class="string">"Allow"</span>,
+      <span class="string">"Principal"</span>: <span class="string">"*"</span>,
+      <span class="string">"Action"</span>: <span class="string">"s3:GetObject"</span>,
+      <span class="string">"Resource"</span>: <span class="string">"arn:aws:s3:::$DEPLOY_BUCKET/*"</span>
+    }
+  ]
+}
+<span class="string">EOF</span>
+
+aws s3api put-bucket-policy --bucket <span class="function">$DEPLOY_BUCKET</span> --policy file://deploy-policy.json
+
+aws s3api put-public-access-block --bucket <span class="function">$DEPLOY_BUCKET</span> \
+    --public-access-block-configuration <span class="string">"BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"</span>
+
+echo <span class="string">"Deploy Bucket: $DEPLOY_BUCKET"</span>
+echo <span class="string">"Website URL: http://$DEPLOY_BUCKET.s3-website-us-east-1.amazonaws.com"</span></code></pre>
+</div>
+<h4>Step 6: Create CodePipeline</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># Create pipeline JSON</span>
+cat > pipeline.json << <span class="string">'EOF'</span>
+{
+  "name": "aws-blueprint-pipeline",
+  "roleArn": "PIPELINE_ROLE",
+  "artifactStore": {
+    "type": "S3",
+    "location": "ARTIFACT_BUCKET"
+  },
+  "stages": [
+    {
+      "name": "Source",
+      "actions": [
+        {
+          "name": "Source",
+          "actionTypeId": {
+            "category": "Source",
+            "owner": "ThirdParty",
+            "provider": "GitHub",
+            "version": "1"
+          },
+          "configuration": {
+            "Owner": "YOUR_GITHUB_USERNAME",
+            "Repo": "YOUR_REPO_NAME",
+            "Branch": "main",
+            "OAuthToken": "YOUR_GITHUB_TOKEN"
+          },
+          "outputArtifacts": [{"name": "SourceCode"}]
+        }
+      ]
+    },
+    {
+      "name": "Build",
+      "actions": [
+        {
+          "name": "BuildAndDeploy",
+          "actionTypeId": {
+            "category": "Build",
+            "owner": "AWS",
+            "provider": "CodeBuild",
+            "version": "1"
+          },
+          "configuration": {
+            "ProjectName": "aws-blueprint-build"
+          },
+          "inputArtifacts": [{"name": "SourceCode"}],
+          "outputArtifacts": [{"name": "BuildOutput"}]
+        }
+      ]
+    }
+  ]
+}
+EOF
+
+<span class="comment"># Replace placeholders</span>
+sed -i <span class="string">"s|PIPELINE_ROLE|$PIPELINE_ROLE|g"</span> pipeline.json
+sed -i <span class="string">"s|ARTIFACT_BUCKET|$ARTIFACT_BUCKET|g"</span> pipeline.json
+
+<span class="comment"># IMPORTANT: Edit pipeline.json and replace YOUR_GITHUB_USERNAME, YOUR_REPO_NAME, and YOUR_GITHUB_TOKEN</span>
+echo <span class="string">"Edit pipeline.json with your GitHub details, then run:"</span>
+echo <span class="string">"aws codepipeline create-pipeline --cli-input-json file://pipeline.json"</span></code></pre>
+</div>
+<div class="info-box info">
+<div class="info-box-icon">&#8505;&#65039;</div>
+<div class="info-box-content"><strong>GitHub Integration</strong><p>Replace YOUR_GITHUB_USERNAME, YOUR_REPO_NAME, and YOUR_GITHUB_TOKEN in pipeline.json. To get a token: GitHub &rarr; Settings &rarr; Developer settings &rarr; Personal access tokens &rarr; Tokens (classic) &rarr; Generate new token with 'repo' scope.</p></div>
+</div>
+<h4>Step 7: Test the Pipeline</h4>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Bash</span><button class="copy-btn" onclick="copyCode(this)">&#128203; Copy</button></div>
+<pre><code><span class="comment"># After creating the pipeline, trigger a manual execution</span>
+aws codepipeline start-pipeline-execution --name aws-blueprint-pipeline
+
+<span class="comment"># Monitor pipeline status</span>
+aws codepipeline get-pipeline-state --name aws-blueprint-pipeline \
+    --query <span class="string">'stageStates[*].{Name:stageName,Status:latestExecution.status}'</span> \
+    --output json | python3 -m json.tool
+
+<span class="comment"># Watch build logs</span>
+aws logs tail /aws/codebuild/aws-blueprint-build --follow</code></pre>
+</div>
+<div class="expected-output">
+<div class="expected-output-header"><span>&#10003;</span> Expected Output</div>
+<pre>[
+    {"Name": "Source", "Status": "Succeeded"},
+    {"Name": "Build", "Status": "Succeeded"}
+]
+
+Build completed on Mon Aug 11 18:30:00 UTC 2026
+Deploying to S3...
+upload: build/index.html to s3://aws-blueprint-prod-site-1234567890/index.html</pre>
+</div>
+<div class="info-box tip">
+<div class="info-box-icon">&#128161;</div>
+<div class="info-box-content"><strong>What You Built</strong><p>A production CI/CD pipeline that automatically builds and deploys your application on every git push. The pipeline includes source control, automated builds, testing, and deployment to S3. Add CloudFront for CDN and custom domains for a complete production workflow.</p></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="footer-content">
+<div>
+<div class="footer-brand">AWS Blueprint</div>
+<p class="footer-desc">The most comprehensive, hands-on AWS learning experience ever created. From zero to hero, one lab at a time.</p>
+</div>
+<div class="footer-links">
+<h4>Learning Path</h4>
+<ul>
+<li><a href="#overview">What is AWS?</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#account">Account Setup</a></li>
+<li><a href="#iam">IAM Security</a></li>
+<li><a href="#cli">AWS CLI</a></li>
+</ul>
+</div>
+<div class="footer-links">
+<h4>Labs</h4>
+<ul>
+<li><a href="#dev-labs">Dev Lab 1: S3 Website</a></li>
+<li><a href="#dev-labs">Dev Lab 2: EC2 Server</a></li>
+<li><a href="#dev-labs">Dev Lab 3: Lambda API</a></li>
+<li><a href="#dev-labs">Dev Lab 4: DynamoDB</a></li>
+<li><a href="#prod-labs">Prod Lab 1: Multi-AZ App</a></li>
+<li><a href="#prod-labs">Prod Lab 2: CI/CD Pipeline</a></li>
+</ul>
+</div>
+<div class="footer-links">
+<h4>Resources</h4>
+<ul>
+<li><a href="https://aws.amazon.com/free" target="_blank">AWS Free Tier</a></li>
+<li><a href="https://docs.aws.amazon.com" target="_blank">AWS Documentation</a></li>
+<li><a href="https://aws.amazon.com/certification" target="_blank">AWS Certifications</a></li>
+<li><a href="https://github.com/nkydigitech" target="_blank">GitHub: @nkydigitech</a></li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">
+<p>Built with passion for the AWS community. Open source under MIT License.</p>
+<p style="margin-top:0.5rem;">Created for <strong>nkydigitech</strong> | AWS Blueprint Zero to Hero</p>
+</div>
+</footer>
+
+<script>
+function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('active');
+}
+function copyCode(btn) {
+    const codeBlock = btn.closest('.code-block, .terminal');
+    let codeText = '';
+    if (codeBlock) {
+        const pre = codeBlock.querySelector('pre');
+        if (pre) codeText = pre.innerText;
+    }
+    if (!codeText) {
+        const pre = btn.closest('.code-header').nextElementSibling;
+        if (pre && pre.tagName === 'PRE') codeText = pre.innerText;
+    }
+    if (codeText) {
+        navigator.clipboard.writeText(codeText).then(() => {
+            const original = btn.innerHTML;
+            btn.innerHTML = '&#10003; Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.innerHTML = original;
+                btn.classList.remove('copied');
+            }, 2000);
+        });
+    }
+}
+function updateProgressBar() {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.getElementById('progressBar').style.width = scrolled + '%';
+}
+function updateActiveNav() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    let current = '';
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (scrollY >= sectionTop) {
+            current = section.getAttribute('id');
+        }
+    });
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+            link.classList.add('active');
+        }
+    });
+}
+function revealOnScroll() {
+    const reveals = document.querySelectorAll('.reveal');
+    reveals.forEach(el => {
+        const windowHeight = window.innerHeight;
+        const elementTop = el.getBoundingClientRect().top;
+        const revealPoint = 100;
+        if (elementTop < windowHeight - revealPoint) {
+            el.classList.add('active');
+        }
+    });
+}
+window.addEventListener('scroll', () => {
+    updateProgressBar();
+    updateActiveNav();
+    revealOnScroll();
+});
+window.addEventListener('load', () => {
+    updateProgressBar();
+    updateActiveNav();
+    revealOnScroll();
+});
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('navLinks').classList.remove('active');
+        }
+    });
+});
+</script>
+</body>
+</html>
