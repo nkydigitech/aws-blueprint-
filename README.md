@@ -1,3 +1,6 @@
+<img width="1190" height="597" alt="image" src="https://github.com/user-attachments/assets/132dceff-47be-4163-b5a4-cd1da76bc0db" />
+
+
 # ☁️ AWS Blueprint for Beginners
 
 > **From zero to production-ready — one copy-paste lab at a time.**
