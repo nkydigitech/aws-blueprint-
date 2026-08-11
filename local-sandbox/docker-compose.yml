@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: aws-blueprint-sandbox
+    ports:
+      - "4566:4566"            # LocalStack gateway (all services)
+      - "4510-4559:4510-4559"  # External service ports
+    environment:
+      - DEBUG=1
+      - SERVICES=s3,ec2,iam,rds,cloudwatch,logs,sns,sqs,lambda,apigateway,route53,autoscaling,elbv2
+      - DEFAULT_REGION=us-east-1
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN:-}
+    volumes:
+      - "./localstack-data:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./init-scripts:/etc/localstack/init/ready.d"
+    networks:
+      - aws-sandbox
+
+  # Optional: A local web UI to visualize your "AWS" resources
+  localstack-web:
+    image: localstack/localstack-web
+    container_name: aws-blueprint-web
+    ports:
+      - "8080:8080"
+    environment:
+      - LOCALSTACK_HOST=localstack:4566
+    depends_on:
+      - localstack
+    networks:
+      - aws-sandbox
+
+networks:
+  aws-sandbox:
+    driver: bridge
