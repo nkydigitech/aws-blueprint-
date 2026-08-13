@@ -244,7 +244,7 @@ Found a bug? Want to add a lab? PRs welcome!
 | 5 | [kubernetes-blueprint](https://github.com/nkydigitech/kubernetes-blueprint) | Orchestration | ✅ Live |
 | 6 | [linux-blueprint](https://github.com/nkydigitech/linux-blueprint) | Fundamentals | 🚧 Coming Soon |
 | 7 | [github-blueprint](https://github.com/nkydigitech/github-blueprint) | Version Control | 🚧 Coming Soon |
-| 8 | [docker-blueprint](https://github.com/nkydigitech/docker-blueprint) | Containers | 🚧 Coming Soon |
+| 8 | [docker-blueprint](https://github.com/nkydigitech/docker-blueprint) | Containers | ✅ Live |
 | 9 | [bash-scripting-blueprint](https://github.com/nkydigitech/bash-scripting-blueprint) | Scripting | 🚧 Coming Soon |
 | 10 | [sdlc-blueprint](https://github.com/nkydigitech/sdlc-blueprint) | Methodology | 🚧 Coming Soon |
 | 11 | [cicd-blueprint](https://github.com/nkydigitech/cicd-blueprint) | CI/CD | 🚧 Coming Soon |
