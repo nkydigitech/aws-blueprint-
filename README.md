@@ -5,7 +5,7 @@
 > **From zero to production-ready — one copy-paste lab at a time.**
 
 <p align="center">
-  <a href="https://github.com/nkydigitech/aws-blueprint-"><img src="https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS"></a>
+  <a href="https://github.com/nkydigitech/aws-blueprint"><img src="https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS"></a>
   <a href="https://aws.amazon.com/free"><img src="https://img.shields.io/badge/Free%20Tier-Only-10b981?style=for-the-badge&logo=amazon&logoColor=white" alt="Free Tier"></a>
   <img src="https://img.shields.io/badge/11%20Labs-Hand--On-232F3E?style=for-the-badge&logo=awslambda&logoColor=FF9900" alt="Labs">
   <img src="https://img.shields.io/badge/Copy--Paste-100%25-FF9900?style=for-the-badge" alt="Copy Paste">
@@ -14,8 +14,8 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/stars/nkydigitech/aws-blueprint-?style=social" alt="Stars">
-  <img src="https://img.shields.io/github/forks/nkydigitech/aws-blueprint-?style=social" alt="Forks">
+  <img src="https://img.shields.io/github/stars/nkydigitech/aws-blueprint?style=social" alt="Stars">
+  <img src="https://img.shields.io/github/forks/nkydigitech/aws-blueprint?style=social" alt="Forks">
   <img src="https://img.shields.io/badge/🇳🇬%20Built%20in-Ikorodu%2C%20Lagos-008751?style=flat-square" alt="Ikorodu">
   <img src="https://img.shields.io/badge/Analogy--Driven-Cybercafés%20%26%20Bouncers-FF9900?style=flat-square" alt="Analogies">
 </p>
@@ -24,7 +24,7 @@
 
 If you've heard *"AWS is the best cloud"* but you have NO idea where to start — you're in the right place. This page explains cloud like NEPA vs generator, then we build.
 
-🔗 **Live Site:** `https://nkydigitech.github.io/aws-blueprint-/` ← Now aligned with this README ✅
+🔗 **Live Site:** `https://nkydigitech.github.io/aws-blueprint/` ← Now aligned with this README ✅
 
 ---
 
@@ -163,8 +163,8 @@ Every lab in this repo is:
 
 ```bash
 # Clone this blueprint
-git clone https://github.com/nkydigitech/aws-blueprint-.git
-cd aws-blueprint-
+git clone https://github.com/nkydigitech/aws-blueprint.git
+cd aws-blueprint
 
 # Start Lab 0
 cd labs/lab-00-setup
