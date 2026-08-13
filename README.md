@@ -233,6 +233,21 @@ Found a bug? Want to add a lab? PRs welcome!
 **Nkechi Anna Ahanonye — nkydigitech**
 
 - Email: nkydigitech01@gmail.com
+## Part of the Blueprint Series
+
+| # | Blueprint | Focus | Status |
+|---|-----------|-------|--------|
+| 1 | [ansible-guide](https://github.com/nkydigitech/ansible-guide) | Ansible Automation | ✅ Live |
+| 2 | [terraform-blueprint](https://github.com/nkydigitech/terraform-blueprint) | Infrastructure as Code | ✅ Live |
+| 3 | **aws-blueprint** | **Amazon Web Services** | **✅ Live** |
+| 4 | [azure-blueprint](https://github.com/nkydigitech/azure-blueprint) | Microsoft Azure | ✅ Live |
+| 5 | [kubernetes-blueprint](https://github.com/nkydigitech/kubernetes-blueprint) | Container Orchestration | ✅ Live |
+| 6 | [linux-blueprint](https://github.com/nkydigitech/linux-blueprint) | Linux Command Line | 🚧 Coming Soon |
+| 7 | [github-blueprint](https://github.com/nkydigitech/github-blueprint) | Git & GitHub | 🚧 Coming Soon |
+| 8 | [docker-blueprint](https://github.com/nkydigitech/docker-blueprint) | Containerization | 🚧 Coming Soon |
+
+## Connect
+
 - LinkedIn: [Nkechi Anna Ahanonye](https://www.linkedin.com/in/nkechiahanonye)
 - GitHub: [@nkydigitech](https://github.com/nkydigitech)
 
