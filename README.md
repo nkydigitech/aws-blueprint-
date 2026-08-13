@@ -20,7 +20,7 @@
   <img src="https://img.shields.io/badge/Analogy--Driven-Cybercafés%20%26%20Bouncers-FF9900?style=flat-square" alt="Analogies">
 </p>
 
-**Built by [Nkechi Anna Ahanonye](https://www.linkedin.com/in/nkechi-ahanonye) for DevOps students who need relatable examples, not textbook theory.**
+**Built by [Nkechi Anna Ahanonye](https://www.linkedin.com/in/nkechiahanonye) for DevOps students who need relatable examples, not textbook theory.**
 
 If you've heard *"AWS is the best cloud"* but you have NO idea where to start — you're in the right place. This page explains cloud like NEPA vs generator, then we build.
 
@@ -231,7 +231,7 @@ Found a bug? Want to add a lab? PRs welcome!
 **Nkechi Anna Ahanonye — nkydigitech**
 
 - Email: nkydigitech01@gmail.com
-- LinkedIn: [Nkechi Anna Ahanonye](https://www.linkedin.com/in/nkechi-ahanonye)
+- LinkedIn: [Nkechi Anna Ahanonye](https://www.linkedin.com/in/nkechiahanonye)
 - GitHub: [@nkydigitech](https://github.com/nkydigitech)
 
 *"Reliability isn't a feature — it's the product."*
