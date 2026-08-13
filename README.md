@@ -20,7 +20,9 @@
   <img src="https://img.shields.io/badge/Analogy--Driven-Cybercafés%20%26%20Bouncers-FF9900?style=flat-square" alt="Analogies">
 </p>
 
-**Built by [Nkechi Anna Ahanonye](https://www.linkedin.com/in/nkechiahanonye) for DevOps students who need relatable examples, not textbook theory.**
+**Built by [Nkechi Anna Ahanonye](https://www.linkedin.com/in/nkechiahanonye) — Cloud & DevOps Engineer | AWS · Ansible · Terraform · K8s | Training the Next Generation of African DevOps Engineers | Open to Remote Roles**
+
+For DevOps students who need relatable, hands-on examples — not textbook theory.
 
 If you've heard *"AWS is the best cloud"* but you have NO idea where to start — you're in the right place. This page explains cloud like NEPA vs generator, then we build.
 
