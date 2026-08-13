@@ -20,7 +20,7 @@
   <img src="https://img.shields.io/badge/Analogy--Driven-Cybercafés%20%26%20Bouncers-FF9900?style=flat-square" alt="Analogies">
 </p>
 
-**Built by [Nkechi Anna Ahanonye](https://www.linkedin.com/in/nkechiahanonye) — Cloud & DevOps Engineer | AWS · Ansible · Terraform · K8s | Training the Next Generation of African DevOps Engineers | Open to Remote Roles**
+**Built by [Nkechi Anna Ahanonye](https://www.linkedin.com/in/nkechiahanonye) — Cloud & DevOps Engineer | I turn manual, 3 AM-breaking deployments into 1-min automated pipelines with AWS + Ansible + Terraform | Featured: 15-Module Ansible Lab with real terminal**
 
 For DevOps students who need relatable, hands-on examples — not textbook theory.
 
